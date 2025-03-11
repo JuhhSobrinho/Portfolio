@@ -1,0 +1,833 @@
+:root {
+  margin: 0;
+  padding: 0 auto;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1,
+span,
+a,
+li,
+h2,
+p {
+  font-family: monospace;
+  color: #c6c5b9;
+  margin: 0;
+  text-decoration: none;
+}
+
+.splash {
+  background-image: url("./assets/splash.png");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-intro {
+  background-color: #2f4550;
+  width: 80%;
+  height: 80%;
+  border-radius: 10px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.line-splash {
+  height: 1px;
+  width: 90%;
+  background-color: #c6c5b9;
+  margin: 10px;
+}
+
+#bemvindo {
+  text-align: center;
+  font-size: 100px;
+}
+
+.devIcon {
+  height: 350px;
+}
+
+body {
+  background-color: #586f7c;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 5px;
+}
+
+/* Estiliza a barra de rolagem */
+::-webkit-scrollbar {
+  width: 2px; /* Largura da barra de rolagem */
+}
+/* Estiliza o controle */
+::-webkit-scrollbar-thumb {
+  background-color: #c6c5b9; /* Cor do controle */
+  border-radius: 6px;
+}
+/* Estiliza a trilha */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Cor da trilha */
+}
+
+header {
+  background-color: #2f4550;
+  width: 80px;
+  height: 500px;
+  margin: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#home{
+  background-color: #2f4550;
+  overflow: hidden;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#guias {
+  width: 100%;
+  overflow-y: auto !important;
+  scroll-behavior: smooth; /* Isso adiciona um efeito suave ao scroll, opcional */
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+#line-menu {
+  margin: 10px;
+  width: 60%;
+}
+
+.icon-guias {
+  height: 25px;
+  width: 25px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.icon-guias:hover {
+  transition: 0.2s;
+  height: 35px;
+  width: 35px;
+}
+
+#intro-guias {
+  height: 60px;
+  width: 60px;
+}
+#intro-guias:hover {
+  height: 65px;
+  width: 65px;
+}
+
+.header-parado {
+  z-index: 1;
+  position: fixed;
+  display: flex;
+  justify-content: end;
+  right: 1;
+}
+
+.header-parado-ul{
+  display: flex;
+}
+
+.link-parado {
+  font-size: 18px;
+  margin-right: 40px;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.link-parado:hover {
+  transition: 0.5s;
+  opacity: 1;
+}
+
+@keyframes animeli {
+  0% {
+    transform: translateY(0);
+    font-size: 17px;
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+li:hover {
+  opacity: 1;
+  animation: animeli 1s infinite;
+}
+
+main {
+  background-color: #2f4550;
+  width: 90%;
+  height: auto;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.titulo-icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*////////////////////////  PADRONIZAÇÃO    //////////////////////////*/
+
+.intro,
+.titulo-midias,
+.icon-descricao,
+.roll-mouse,
+.sobre,
+.contato {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/*///////////////////////////////*/
+
+.hello-titulo {
+  font-size: 100px;
+}
+
+.icon-midias {
+  width: 40px;
+  margin: 40px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.icon-midias:hover {
+  width: 60px;
+  margin: 60px;
+  transition: 0.5s;
+}
+
+.icon-eu {
+  height: 300px;
+  transition: 0.5s;
+}
+
+.icon-eu:hover {
+  height: 320px;
+  transition: 0.5s;
+}
+
+.cacador {
+  height: 20px;
+}
+
+.roll {
+  display: flex;
+  width: 40px;
+  height: 70px;
+  border: 2px solid;
+  border-radius: 50px;
+  border-color: white;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+@keyframes animeroll {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(50px);
+    background-color: transparent;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.boulinha {
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 360px;
+  animation: animeroll 2s infinite;
+}
+.mouse {
+  color: transparent;
+}
+
+.roll-mouse:hover .mouse {
+  transition: 1s;
+  color: #c6c5b9;
+}
+
+.line {
+  height: 1px;
+  width: 90%;
+  background-color: #c6c5b9;
+  margin: 30px;
+}
+
+.sobre-habilidade {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.titulo-sobre {
+  font-size: 28px;
+}
+
+.sobre-quem-sou {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sobre-habilidade-titulo {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.quemsou-dados {
+  text-align: center;
+  width: 300px;
+}
+
+.quemsou-dados {
+  font-size: 16px;
+}
+
+.habilidades {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.habilidades-card {
+  background-color: #393d3f;
+  width: 280px;
+  height: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: justify;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.git-stats{
+  height: 180;
+}
+
+.habilidades-dados {
+  font-size: 18px;
+}
+
+#card-cert {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 280px;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  transition: 1s;
+}
+
+#carrossel {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 2000px;
+  justify-content: space-between;
+  align-items: center;
+  animation: scroll 20s linear infinite;
+  transition: 1s;
+}
+
+#card-cert:hover #carrossel {
+  transition: 1s;
+  animation: none;
+  width: 380px;
+  height: 400px;
+  overflow: auto;
+}
+
+.slide {
+  width: 380px; /* Largura de cada slide */
+  position: relative;
+  z-index: 1; /* Animação de transição */
+}
+
+.certificado {
+  width: 300px;
+  margin: 10px;
+  transition: width 1s; /* Adicionado para suavizar a transição de largura */
+}
+
+#card-cert:hover,
+#card-cert:hover .certificado {
+  width: 370px;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.card-forme-contato {
+  background-color: #393d3f;
+  width: 500px;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dados-text {
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  margin: 5px;
+  padding: 10px;
+  outline: none;
+  font-family: monospace;
+  background-color: #c6c5b9;
+  width: 300px;
+}
+
+#msg {
+  width: auto;
+  height: 300px;
+  text-align: left;
+  line-height: 1;
+}
+
+.btn-enviar {
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  margin: 5px;
+  padding: 10px;
+  font-family: monospace;
+  background-color: #c6c5b9;
+  width: 300px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn-enviar:hover {
+  transition: 1s;
+  background-color: rgb(23, 35, 41);
+  color: #c6c5b9;
+}
+
+/*/////////////////////PROJECT ///////////////////////*/
+
+.img-ficha {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.img-project {
+  width: 600px;
+  height: 350px;
+  border-radius: 5px;
+  filter: blur(3px);
+  transition: 0.5s;
+}
+
+.projeto-container {
+  position: relative;
+  display: inline-block; /* Isso faz com que o container ocupe apenas o espaço necessário */
+}
+
+.projeto-container:hover .img-project {
+  transition: 1s;
+  filter: blur(0px);
+}
+
+.nome-project {
+  z-index: 1;
+  font-size: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #77766f;
+}
+
+.nome-project:hover {
+  color: transparent;
+}
+
+.sobre-project-titulo {
+  font-size: 24px;
+  padding: 10px;
+}
+
+.sobre-project-dados {
+  width: 570px;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.ficha-git{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: 1s;
+}
+
+.ficha-card {
+  background-color: #393d3f;
+  width: 350px;
+  height: 220px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.git-readme{
+  transition: 1s;
+  width: 350px;
+  margin: 10px;
+  
+}
+
+.descricao {
+  padding: 10px;
+  height: 150px;
+}
+
+.descricao-link{
+  padding: 10px;
+}
+
+.ficha-spans {
+  font-size: 18px;
+  padding: 5px;
+  transition: 0.5s;
+}
+
+#codigoLink:hover,
+#projectLink:hover {
+  transition: 0.5s;
+  font-size: 18px;
+  padding: 4px;
+  color: #586f7c;
+}
+
+@media screen and (max-width: 780px) {
+  /*//////////////////////////-base-////////////////////////////*/
+
+  body {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    width: 100%;
+    height: 80px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+  }
+
+   #guias {
+  flex-direction: row-reverse;
+  }
+
+  #home{
+  flex-direction: row;
+}
+  
+  main {
+    background-color: #2f4550;
+    width: 100%;
+    border-radius: 5px;
+    overflow: auto;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #line-menu {
+    margin: 10px;
+    width: 1px;
+    height: 60%;
+    background-color: #c6c5b9;
+  }
+  .icon-guias {
+    height: 30px;
+    width: 30px;
+  }
+
+  /*//////////////////////////-main-////////////////////////////*/
+
+  .header-parado {
+    z-index: 1;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+  }
+
+  .link-parado {
+    font-size: 18px;
+    opacity: 0.6;
+    margin: 10px;
+    cursor: pointer;
+  }
+
+  li{
+    list-style-type: none;
+  }
+
+  .header-parado-ul{
+    background-color: #586f7c;    
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    width: 80%;
+    justify-content: space-around;
+  }
+
+  /*//////////////////////////-intro-////////////////////////////*/
+
+  .titulo-midias {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .titulo-midias{
+    margin: 0px;
+  }
+
+  .hello-titulo {
+    width: 100%;
+    font-size: 80px;
+    text-align: center;
+  }
+
+  .icon-midias {
+    width: 30px;
+    height: 30px;
+    margin: 15px;
+    margin-bottom: 0px;
+  }
+
+  .icon-midias:hover {
+    width: 35px;
+    height: 35px;
+    margin: 15px;
+    transition: 0.5s;
+  }
+
+  .icon-descricao {
+    margin: 0px;
+    width: 90%;
+    height: auto;
+  }
+
+  .icon-eu {
+    width: auto;
+    height: 90%;
+    transition: 0.5s;
+  }
+
+  .icon-eu:hover {
+    height: 280px;
+    width: 280px;
+    transition: 0.5s;
+  }
+
+  .sobre-habilidade-titulo {
+    margin-top: 50px;
+    width: 200px;
+    text-align: center;
+  }
+
+  /*//////////////////////////-sobre mim-////////////////////////////*/
+
+  .descricao-titulo,
+  .habilidades-card,
+  .quemsou-dados,
+  .card-forme-contato {
+    text-align: center;
+    width: 95%;
+    height: auto;
+  }
+
+  .git-stats{
+    width: 95%;
+    height: auto;
+  }
+
+  #card-cert {
+    width: 300px;
+  }
+
+  #card-cert:hover,
+  #card-cert:hover .certificado {
+    width: 300px;
+  }
+
+  .titulo-icon,
+  .titulo-midias,
+  .sobre,
+  .contato,
+  .intro {
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+  }
+
+  .sobre-habilidade {
+    flex-direction: column;
+  }
+
+  .btn-enviar,
+  #nome,
+  #email {
+    width: 90%;
+  }
+
+  /*//////////////////////////-Projetos-////////////////////////////*/
+
+  #main-project {
+    padding-top: 20px;
+    background-color: #2f4550;
+    width: 100%;
+    border-radius: 5px;
+    overflow: auto;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .projeto-container {
+    width: auto;
+  }
+
+  .img-ficha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 90%;
+    margin: 0px;
+  }
+
+  
+
+  .projeto-container:hover .img-project {
+    transition: 1s;
+    width: 100%;
+    filter: blur(0px);
+  }
+
+  .ficha-git{
+    width: 90%;
+    transition: 1s;
+  }
+
+  .ficha-card {
+    width: 90%;
+    height: auto;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .git-readme{
+    transition: 1s;
+    width: 90%;
+    margin: 10px;
+    
+  }
+
+  .descricao {
+    padding: 10px;
+    height: auto;
+  }
+
+  .line-project{
+      height: 1px;
+      width: 90%;
+      background-color: #c6c5b9;
+      margin: 30px;
+  }
+
+  .sobre-project-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 95%;
+  }
+
+  .img-project {
+    width: 95%;
+    height: auto;
+    border-radius: 5px;
+    filter: blur(3px);
+    transition: 0.5s;
+  }
+
+  .sobre-project-titulo {
+    width: auto;
+  }
+
+  .titulo-sobre{
+    width: auto;
+    text-align: center;
+  }
+
+  .sobre-project-dados {
+    width: 90%;
+    font-size: 16px;
+    padding: 10px;
+  }
+}
