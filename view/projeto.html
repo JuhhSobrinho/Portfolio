@@ -1,47 +1,58 @@
 <html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="./assets/project.svg" type="image/x-icon">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="./assets/project.svg"
+            type="image/x-icon">
+        <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        <link rel="stylesheet" type="text/css"
+            href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+ <script
+            src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+        <!-- Toastify JS -->
+        <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <title>Projetos</title>
-</head>
+        <title>Projetos</title>
+    </head>
 
-<body>
-    <header id="home">
-        <div class="line" id="line-menu"></div>
-            <a class="guia" href="./index.html">
-                <img id="intro-guias" class="icon-guias" src="./assets/Maskgroup.png" alt="guia-meuperfil" />
-            </a>
-        <nav id="guias">
-        </nav>
-    </header>
+    <body>
+        <div id="particles-js"></div>
+        <main id="main-projects">
 
-    <main id="main-project">
+            <section class="img-ficha" id="img-ficha">
 
-        <section class="img-ficha" id="img-ficha">
+            </section>
 
-        </section>
+            <div class="line"></div>
+            <section class="contato" id="contato">
 
-        <div class="line"></div>
-        <section class="contato" id="contato">
-              
-            <h2 class="titulo-sobre">Deixe seu feedback</h2>
-            <form class="card-forme-contato" id="contact-form">
-                <div class="input-text">
-                    <input class="dados-text" placeholder="Seu Nome" type="text" name="user_name" id="nome" />
-                    <input class="dados-text" placeholder="Seu Email" type="text" name="user_email" id="email" />
-                    <textarea class="dados-text" placeholder="Sua Mensagem: alguma duvida ou o que achou do projeto"
-                        name="message" id="msg"></textarea>
-                </div>
-                <input id="btnEnviar" class="btn-enviar" type="button" value="Enviar" />
-            </form>
-        </section>
-    </main>
-    <script type="module" src="../controller/controller.js"></script>
-</body>
+                <h2 class="titulo-sobre">Deixe seu feedback</h2>
+                <form class="card-forme-contato" id="contact-form" method="POST"
+                    action="https://formsubmit.co/juliano.sobrinhojunior@gmail.com">
+                    <div class="input-text">
+                        <input class="dados-text" placeholder="Seu Nome"
+                            type="text" name="name" id="nome" required />
+                        <input class="dados-text" placeholder="Seu Email"
+                            type="email" name="email" id="email" required />
+                        <textarea class="dados-text" placeholder="Sua Mensagem"
+                            name="message" id="msg" required></textarea>
+                    </div>
+
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="box">
+                    <input type="hidden" name="_autoresponse"
+                        value="Obrigado por entrar em contato! Em breve retornarei.">
+
+                    <input id="btnEnviar" class="btn-enviar" type="submit"
+                        value="Enviar" />
+                </form>
+            </section>
+        </main>
+        <script type="module" src="../controller/controller.js"></script>
+    </body>
 
 </html>

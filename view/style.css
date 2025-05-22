@@ -55,10 +55,9 @@ p {
 }
 
 body {
-  background-color: #586f7c;
+  background-color: #131c20;
   display: flex;
   justify-content: space-evenly;
-  padding: 5px;
 }
 
 /* Estiliza a barra de rolagem */
@@ -75,63 +74,6 @@ body {
   background-color: transparent; /* Cor da trilha */
 }
 
-header {
-  background-color: #2f4550;
-  width: 80px;
-  height: 500px;
-  margin: 10px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-#home{
-  background-color: #2f4550;
-  overflow: hidden;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-#guias {
-  width: 100%;
-  overflow-y: auto !important;
-  scroll-behavior: smooth; /* Isso adiciona um efeito suave ao scroll, opcional */
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-}
-
-#line-menu {
-  margin: 10px;
-  width: 60%;
-}
-
-.icon-guias {
-  height: 25px;
-  width: 25px;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.icon-guias:hover {
-  transition: 0.2s;
-  height: 35px;
-  width: 35px;
-}
-
-#intro-guias {
-  height: 60px;
-  width: 60px;
-}
-#intro-guias:hover {
-  height: 65px;
-  width: 65px;
-}
 
 .header-parado {
   z-index: 1;
@@ -174,16 +116,31 @@ li:hover {
   opacity: 1;
   animation: animeli 1s infinite;
 }
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* fica atrás de todo o conteúdo */
+}
+
 
 main {
-  background-color: #2f4550;
-  width: 90%;
+  background-color: #1b272d7a;
+  width: 100%;
   height: auto;
   border-radius: 5px;
   overflow: auto;
 }
 
+.intro{
+  height: 80vh;
+}
+
 .titulo-icon {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -197,6 +154,7 @@ main {
 .icon-descricao,
 .roll-mouse,
 .sobre,
+.meus-projetos,
 .contato {
   display: flex;
   flex-direction: column;
@@ -282,7 +240,7 @@ main {
   height: 1px;
   width: 90%;
   background-color: #c6c5b9;
-  margin: 30px;
+  margin: 30px 0px 30px 0px;
 }
 
 .sobre-habilidade {
@@ -308,13 +266,15 @@ main {
 }
 
 .quemsou-dados {
-  text-align: center;
-  width: 300px;
+  text-align: left;
+  width: 700px;
 }
 
 .quemsou-dados {
   font-size: 16px;
 }
+
+/*//////////////////////////-habilidade-////////////////////////////*/
 
 .habilidades {
   display: flex;
@@ -323,15 +283,15 @@ main {
 }
 
 .habilidades-card {
-  background-color: #393d3f;
-  width: 280px;
+  background-color: #393d3fb9;
+  width: 80%;
   height: 300px;
   padding: 10px;
   border-radius: 5px;
   text-align: justify;
   align-items: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
 }
 
 .git-stats{
@@ -340,6 +300,87 @@ main {
 
 .habilidades-dados {
   font-size: 18px;
+}
+
+/*//////////////////////////-projeto-////////////////////////////*/
+
+
+
+.menu-projects {
+  background-color: #393d3fb9;
+  width: 80%;
+  height: 700px;
+  border-radius: 5px;
+}
+
+.line-vertical {
+  height: 200px;
+  width: 1px;
+  background-color: #c6c5b9;
+}
+
+#home{
+  background-color: #393d3fb9;
+  overflow: hidden;
+}
+
+.guia{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  height: auto;
+  margin: 15px;
+}
+
+.guia:hover {
+  transition: 0.2s;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+#guias {
+  height:  700px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-wrap: wrap;
+}
+
+#line-menu {
+  margin: 10px;
+  width: 60%;
+}
+
+.img-projects{
+  width: 400px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.icon-guias {
+  height: 25px;
+  width: 25px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.icon-guias:hover {
+  transition: 0.2s;
+  height: 35px;
+  width: 35px;
+}
+
+#intro-guias {
+  height: 60px;
+  width: 60px;
+}
+#intro-guias:hover {
+  height: 65px;
+  width: 65px;
 }
 
 #card-cert {
@@ -401,7 +442,7 @@ main {
 }
 
 .card-forme-contato {
-  background-color: #393d3f;
+  background-color: #393d3fb9;
   width: 500px;
   padding: 20px;
   border-radius: 5px;
@@ -457,6 +498,10 @@ main {
 
 /*/////////////////////PROJECT ///////////////////////*/
 
+#main-projects {
+  background-color: #1b272d7a;
+}
+
 .img-ficha {
   padding-top: 20px;
   display: flex;
@@ -464,8 +509,7 @@ main {
 }
 
 .img-project {
-  width: 600px;
-  height: 350px;
+  width: 100%;
   border-radius: 5px;
   filter: blur(3px);
   transition: 0.5s;
@@ -501,9 +545,15 @@ main {
 }
 
 .sobre-project-dados {
-  width: 570px;
+  width: 400px;
   font-size: 16px;
   padding: 10px;
+}
+
+.img-skill{
+  height: 60px;
+  width: 60px;
+  margin: 10px;
 }
 
 .ficha-git{
@@ -514,7 +564,7 @@ main {
 }
 
 .ficha-card {
-  background-color: #393d3f;
+  background-color: #393d3f7a;
   width: 350px;
   height: 220px;
   padding: 10px;
@@ -561,7 +611,7 @@ main {
     align-items: center;
   }
 
-  header {
+  menu-projects {
     width: 100%;
     height: 80px;
     margin: 10px;
@@ -580,7 +630,6 @@ main {
 }
   
   main {
-    background-color: #2f4550;
     width: 100%;
     border-radius: 5px;
     overflow: auto;
@@ -699,6 +748,14 @@ main {
     height: auto;
   }
 
+  .habilidades-card{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    width: 95%;
+  }
+
   .git-stats{
     width: 95%;
     height: auto;
@@ -727,6 +784,16 @@ main {
     flex-direction: column;
   }
 
+
+  .meus-projetos{
+    width: 100%;
+    padding: 0px;
+  }
+
+  .menu-projects{
+    width: 95%;
+  }
+
   .btn-enviar,
   #nome,
   #email {
@@ -737,7 +804,7 @@ main {
 
   #main-project {
     padding-top: 20px;
-    background-color: #2f4550;
+    background-color: #2f45507e;
     width: 100%;
     border-radius: 5px;
     overflow: auto;
