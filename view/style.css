@@ -1,10 +1,19 @@
 :root {
+  --background-color: #2a2a2a;
+  --splash-background: #131c20;
+  --text-color: #c6c5b9;
+  --link-color: #089964;
+  --header-background: #161616;
+  --card-background: #1E1E1E;
+  --project-background: #101010;
+  --scrollbar-thumb: #089964;
+  --scrollbar-track: transparent;
+  --hover-opacity: 0.4;
+  --hover-opacity-full: 1;
+  --hover-transition: 0.5s;
+  --font-family: monospace;
   margin: 0;
   padding: 0 auto;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 h1,
@@ -13,8 +22,8 @@ a,
 li,
 h2,
 p {
-  font-family: monospace;
-  color: #c6c5b9;
+  font-family: var(--font-family);
+  color: var(--text-color);
   margin: 0;
   text-decoration: none;
 }
@@ -27,7 +36,7 @@ p {
 }
 
 .splash-intro {
-  background-color: #131c20;
+  background-color: var(--splash-background);
   width: 80%;
   height: 80%;
   border-radius: 10px;
@@ -41,7 +50,7 @@ p {
 .line-splash {
   height: 1px;
   width: 90%;
-  background-color: #c6c5b9;
+  background-color: var(--text-color);
   margin: 10px;
 }
 
@@ -55,25 +64,24 @@ p {
 }
 
 body {
-  background-color: #131c20;
+  background-color: var(--background-color);
   display: flex;
   justify-content: space-evenly;
 }
 
 /* Estiliza a barra de rolagem */
 ::-webkit-scrollbar {
-  width: 2px; /* Largura da barra de rolagem */
-}
-/* Estiliza o controle */
-::-webkit-scrollbar-thumb {
-  background-color: #c6c5b9; /* Cor do controle */
-  border-radius: 6px;
-}
-/* Estiliza a trilha */
-::-webkit-scrollbar-track {
-  background-color: transparent; /* Cor da trilha */
+  width: 2px;
 }
 
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+}
 
 .header-parado {
   z-index: 1;
@@ -83,20 +91,21 @@ body {
   right: 1;
 }
 
-.header-parado-ul{
+.header-parado-ul {
   display: flex;
 }
 
 .link-parado {
   font-size: 18px;
   margin-right: 40px;
-  opacity: 0.4;
+  opacity: var(--hover-opacity);
   cursor: pointer;
 }
 
 .link-parado:hover {
-  transition: 0.5s;
-  opacity: 1;
+  transition: var(--hover-transition);
+  opacity: var(--hover-opacity-full);
+  color: var(--link-color);
 }
 
 @keyframes animeli {
@@ -104,9 +113,11 @@ body {
     transform: translateY(0);
     font-size: 17px;
   }
+
   50% {
     transform: translateY(0px);
   }
+
   100% {
     transform: translateY(0);
   }
@@ -116,26 +127,32 @@ li:hover {
   opacity: 1;
   animation: animeli 1s infinite;
 }
+
 #particles-js {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* fica atrás de todo o conteúdo */
+  z-index: -1;
 }
 
-
 main {
-  background-color: #1b272d7a;
+  scroll-behavior: smooth;
+  background-color: transparent;
   width: 100%;
   height: auto;
   border-radius: 5px;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.intro{
-  height: 80vh;
+.intro {
+  width: 100%;
+  margin-bottom: 200px;
+  margin-top: 100px;
 }
 
 .titulo-icon {
@@ -143,8 +160,7 @@ main {
   height: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-evenly;
 }
 
 /*////////////////////////  PADRONIZAÇÃO    //////////////////////////*/
@@ -153,14 +169,28 @@ main {
 .titulo-midias,
 .icon-descricao,
 .roll-mouse,
-.sobre,
 .meus-projetos,
 .contato {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-  margin-top: 20px;
+}
+
+.meus-projetos {
+  background-color: var(--project-background);
+}
+
+.sobre {
+  background-color: var(--project-background);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titulo-midias {
+  width: 700px;
+  justify-content: center;
 }
 
 /*///////////////////////////////*/
@@ -169,27 +199,61 @@ main {
   font-size: 100px;
 }
 
+#helloWorld::after,
+.titulo-sobre::before,
+.status::before {
+  content: '|';
+  animation: blink 1s steps(1, start) infinite;
+  color: var(--link-color);
+  margin-left: 4px;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
 .icon-midias {
+  font-size: 50px;
   width: 40px;
   margin: 40px;
   cursor: pointer;
-  transition: 0.5s;
+  transition: var(--hover-transition);
 }
 
 .icon-midias:hover {
-  width: 60px;
-  margin: 60px;
-  transition: 0.5s;
+  font-size: 60px;
+  width: 50px;
+  margin: 50px;
+  transition: var(--hover-transition);
+  color: var(--link-color);
+}
+
+.imagem-3d {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(20px 20px 0 var(--link-color));
+  transform: rotateY(10deg);
 }
 
 .icon-eu {
-  height: 300px;
-  transition: 0.5s;
+  height: 500px;
+  transition: var(--hover-transition);
+  border-radius: 5px;
+  filter: grayscale(100%) brightness(0.8);
+  margin-bottom: 30px;
 }
 
 .icon-eu:hover {
-  height: 320px;
-  transition: 0.5s;
+  height: 600px;
+  transition: var(--hover-transition);
 }
 
 .cacador {
@@ -202,7 +266,7 @@ main {
   height: 70px;
   border: 2px solid;
   border-radius: 50px;
-  border-color: white;
+  border-color: var(--link-color);
   justify-content: center;
   padding-top: 10px;
 }
@@ -211,10 +275,12 @@ main {
   0% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(50px);
     background-color: transparent;
   }
+
   100% {
     transform: translateY(0);
   }
@@ -227,33 +293,84 @@ main {
   border-radius: 360px;
   animation: animeroll 2s infinite;
 }
+
 .mouse {
   color: transparent;
 }
 
 .roll-mouse:hover .mouse {
   transition: 1s;
-  color: #c6c5b9;
+  color: var(--text-color);
 }
 
 .line {
   height: 1px;
-  width: 90%;
-  background-color: #c6c5b9;
-  margin: 30px 0px 30px 0px;
+  width: 95%;
+  background-color: var(--text-color);
+  margin: 30px 0px;
+  border: solid 1px var(--text-color);
 }
 
 .sobre-habilidade {
   display: flex;
   width: 100%;
   justify-content: space-around;
+  align-items: center;
 }
 
+.design {
+  width: 100%;
+  height: 600px;
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  background: var(--header-background);
+  padding: 20px 0;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 20s linear infinite;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 50px;
+}
+
+.tag {
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap;
+  color: var(--link-color);
+  flex-shrink: 0;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+
+
+
 .titulo-sobre {
-  font-size: 28px;
+  font-size: 30px;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .sobre-quem-sou {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -268,9 +385,6 @@ main {
 .quemsou-dados {
   text-align: left;
   width: 700px;
-}
-
-.quemsou-dados {
   font-size: 16px;
 }
 
@@ -280,10 +394,11 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--project-background);
 }
 
 .habilidades-card {
-  background-color: #393d3fb9;
+  background-color: var(--header-background);
   width: 80%;
   height: 300px;
   padding: 10px;
@@ -294,7 +409,7 @@ main {
   flex-direction: row-reverse;
 }
 
-.git-stats{
+.git-stats {
   height: 180;
 }
 
@@ -304,43 +419,44 @@ main {
 
 /*//////////////////////////-projeto-////////////////////////////*/
 
-
-
 .menu-projects {
-  background-color: #393d3fb9;
   width: 80%;
   height: 700px;
   border-radius: 5px;
 }
 
 .line-vertical {
-  height: 200px;
-  width: 1px;
-  background-color: #c6c5b9;
+  height: 60%;
+  border: 1px solid var(--link-color);
 }
 
-#home{
-  background-color: #393d3fb9;
+#home {
   overflow: hidden;
 }
 
-.guia{
+.guia {
+  background-color: var(--header-background);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: auto;
   height: auto;
   margin: 15px;
+  margin-top: 50px;
+  border-radius: 5px;
+  transition: 0.2s;
 }
 
 .guia:hover {
   transition: 0.2s;
   transform: scale(1.05);
   cursor: pointer;
+  box-shadow: var(--link-color) 0px 0px 30px;
 }
 
 #guias {
-  height:  700px;
+  height: 700px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -355,7 +471,7 @@ main {
   width: 60%;
 }
 
-.img-projects{
+.img-projects {
   width: 400px;
   height: auto;
   border-radius: 5px;
@@ -378,6 +494,7 @@ main {
   height: 60px;
   width: 60px;
 }
+
 #intro-guias:hover {
   height: 65px;
   width: 65px;
@@ -416,15 +533,13 @@ main {
 }
 
 .slide {
-  width: 380px; /* Largura de cada slide */
-  position: relative;
-  z-index: 1; /* Animação de transição */
+  width: 380px;
 }
 
 .certificado {
   width: 300px;
   margin: 10px;
-  transition: width 1s; /* Adicionado para suavizar a transição de largura */
+  transition: width 1s;
 }
 
 #card-cert:hover,
@@ -436,14 +551,19 @@ main {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-100%);
   }
 }
 
+.contato {
+  width: 100%;
+}
+
 .card-forme-contato {
-  background-color: #393d3fb9;
-  width: 500px;
+  background-color: var(--card-background);
+  width: 90%;
   padding: 20px;
   border-radius: 5px;
   display: flex;
@@ -465,8 +585,8 @@ main {
   margin: 5px;
   padding: 10px;
   outline: none;
-  font-family: monospace;
-  background-color: #c6c5b9;
+  font-family: var(--font-family);
+  background-color: var(--text-color);
   width: 300px;
 }
 
@@ -483,23 +603,23 @@ main {
   border: none;
   margin: 5px;
   padding: 10px;
-  font-family: monospace;
-  background-color: #c6c5b9;
+  font-family: var(--font-family);
+  background-color: var(--text-color);
   width: 300px;
   cursor: pointer;
-  transition: 0.5s;
+  transition: var(--hover-transition);
 }
 
 .btn-enviar:hover {
-  transition: 1s;
-  background-color: rgb(23, 35, 41);
-  color: #c6c5b9;
+  transition: 0.5s;
+  background-color: var(--link-color);
+  color: var(--text-color);
 }
 
 /*/////////////////////PROJECT ///////////////////////*/
 
 #main-projects {
-  background-color: #1b272d7a;
+  background-color: transparent;
 }
 
 .img-ficha {
@@ -512,12 +632,12 @@ main {
   width: 100%;
   border-radius: 5px;
   filter: blur(3px);
-  transition: 0.5s;
+  transition: var(--hover-transition);
 }
 
 .projeto-container {
   position: relative;
-  display: inline-block; /* Isso faz com que o container ocupe apenas o espaço necessário */
+  display: inline-block;
 }
 
 .projeto-container:hover .img-project {
@@ -532,7 +652,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #77766f;
+  color: var(--link-color);
 }
 
 .nome-project:hover {
@@ -550,21 +670,24 @@ main {
   padding: 10px;
 }
 
-.img-skill{
+.img-skill {
   height: 60px;
   width: 60px;
   margin: 10px;
 }
 
-.ficha-git{
+.ficha-git {
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: 1s;
+  background-color: var(--project-background);
+  padding-top: 10px;
+  border-radius: 5px;
 }
 
 .ficha-card {
-  background-color: #393d3f7a;
+  background-color: var(--card-background);
   width: 350px;
   height: 220px;
   padding: 10px;
@@ -573,11 +696,10 @@ main {
   flex-direction: column;
 }
 
-.git-readme{
+.git-readme {
   transition: 1s;
   width: 350px;
   margin: 10px;
-  
 }
 
 .descricao {
@@ -585,19 +707,19 @@ main {
   height: 150px;
 }
 
-.descricao-link{
+.descricao-link {
   padding: 10px;
 }
 
 .ficha-spans {
   font-size: 18px;
   padding: 5px;
-  transition: 0.5s;
+  transition: var(--hover-transition);
 }
 
 #codigoLink:hover,
 #projectLink:hover {
-  transition: 0.5s;
+  transition: var(--hover-transition);
   font-size: 18px;
   padding: 4px;
   color: #586f7c;
@@ -621,19 +743,25 @@ main {
     overflow: auto;
   }
 
-   #guias {
-  flex-direction: row-reverse;
+  #guias {
+    flex-direction: row-reverse;
   }
 
-  #home{
-  flex-direction: row;
-}
-  
+  .img-projects {
+    width: 300px;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  #home {
+    flex-direction: row;
+  }
+
   main {
     width: 100%;
     border-radius: 5px;
     overflow: auto;
-    height: 85%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -643,8 +771,9 @@ main {
     margin: 10px;
     width: 1px;
     height: 60%;
-    background-color: #c6c5b9;
+    background-color: var(--text-color);
   }
+
   .icon-guias {
     height: 30px;
     width: 30px;
@@ -668,12 +797,12 @@ main {
     cursor: pointer;
   }
 
-  li{
+  li {
     list-style-type: none;
   }
 
-  .header-parado-ul{
-    background-color: #586f7c;    
+  .header-parado-ul {
+    background-color: var(--header-background);
     border-radius: 5px;
     padding: 5px;
     display: flex;
@@ -688,13 +817,14 @@ main {
     align-items: center;
     width: 100%;
   }
-  
-  .titulo-midias{
+
+  .titulo-midias {
     margin: 0px;
   }
 
   .hello-titulo {
     width: 100%;
+    height: 200px;
     font-size: 80px;
     text-align: center;
   }
@@ -710,7 +840,7 @@ main {
     width: 35px;
     height: 35px;
     margin: 15px;
-    transition: 0.5s;
+    transition: var(--hover-transition);
   }
 
   .icon-descricao {
@@ -720,15 +850,15 @@ main {
   }
 
   .icon-eu {
-    width: auto;
-    height: 90%;
-    transition: 0.5s;
+    margin-top: 20px;
+    width: 100%;
+    height: 300px;
+    transition: var(--hover-transition);
   }
 
   .icon-eu:hover {
-    height: 280px;
-    width: 280px;
-    transition: 0.5s;
+    height: 350px;
+    transition: var(--hover-transition);
   }
 
   .sobre-habilidade-titulo {
@@ -748,7 +878,7 @@ main {
     height: auto;
   }
 
-  .habilidades-card{
+  .habilidades-card {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -756,7 +886,7 @@ main {
     width: 95%;
   }
 
-  .git-stats{
+  .git-stats {
     width: 95%;
     height: auto;
   }
@@ -772,7 +902,6 @@ main {
 
   .titulo-icon,
   .titulo-midias,
-  .sobre,
   .contato,
   .intro {
     flex-direction: column;
@@ -784,13 +913,13 @@ main {
     flex-direction: column;
   }
 
-
-  .meus-projetos{
+  .meus-projetos,
+  .sobre {
     width: 100%;
     padding: 0px;
   }
 
-  .menu-projects{
+  .menu-projects {
     width: 95%;
   }
 
@@ -828,15 +957,13 @@ main {
     margin: 0px;
   }
 
-  
-
   .projeto-container:hover .img-project {
     transition: 1s;
     width: 100%;
     filter: blur(0px);
   }
 
-  .ficha-git{
+  .ficha-git {
     width: 90%;
     transition: 1s;
   }
@@ -848,11 +975,10 @@ main {
     border-radius: 5px;
   }
 
-  .git-readme{
+  .git-readme {
     transition: 1s;
     width: 90%;
     margin: 10px;
-    
   }
 
   .descricao {
@@ -860,11 +986,18 @@ main {
     height: auto;
   }
 
-  .line-project{
-      height: 1px;
-      width: 90%;
-      background-color: #c6c5b9;
-      margin: 30px;
+  .line-project {
+    height: 1px;
+    width: 90%;
+    background-color: var(--text-color);
+    margin: 30px;
+  }
+
+  .line-vertical {
+    margin-top: 30px;
+    width: 60%;
+    height: 0px;
+    border: 1px solid var(--link-color);
   }
 
   .sobre-project-img {
@@ -880,14 +1013,14 @@ main {
     height: auto;
     border-radius: 5px;
     filter: blur(3px);
-    transition: 0.5s;
+    transition: var(--hover-transition);
   }
 
   .sobre-project-titulo {
     width: auto;
   }
 
-  .titulo-sobre{
+  .titulo-sobre {
     width: auto;
     text-align: center;
   }
