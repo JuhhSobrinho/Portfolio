@@ -36,7 +36,7 @@ p {
 }
 
 .splash-intro {
-  background-color: var(--splash-background);
+  background-color: var(--project-background);
   width: 80%;
   height: 80%;
   border-radius: 10px;
