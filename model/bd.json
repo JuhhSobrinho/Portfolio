@@ -10,7 +10,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/x-men",
         "linkProj": "https://juhhsobrinho.github.io/x-men/",
         "linkCodFake": "GitHub/X-Men.com",
-        "linkProjFake": "GitHub.io/X-Men.com",
+        "linkProjFake": "X-Men.com",
         "sobre": "X-MEN, desenvolvido em JavaScript, CSS e HTML. Foi utilizado um array como banco de dados para armazenar o nome, descrição e imagem do personagem, sendo assim utilizado no projeto.",
         "main": "./projeto.html"
     },
@@ -25,7 +25,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/Calculadaora-Mentor",
         "linkProj": "https://juhhsobrinho.github.io/Calculadaora-Mentor/",
         "linkCodFake": "GitHub/Calc-Mentor.com",
-        "linkProjFake": "GitHub.io/Calc-Mentor.com",
+        "linkProjFake": "Calc-Mentor.com",
         "sobre": "Calculadora Mentor, desenvolvida em JavaScript, CSS e HTML. Projeto inspirado pelo Front-end Mentor, um local que disponibiliza várias ideias de projeto para testar suas habilidades.",
         "main": "./projeto.html"
     },
@@ -40,7 +40,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/InteractiveCard",
         "linkProj": "https://juhhsobrinho.github.io/InteractiveCard/",
         "linkCodFake": "GitHub/Inter-Card.com",
-        "linkProjFake": "GitHub.io/Inter-Card.com",
+        "linkProjFake": "Inter-Card.com",
         "sobre": "Interactive Card, desenvolvida em React.js, CSS e HTML. Criada para o cadastro de forma mais interativa, informando campos inválidos e vazios. Projeto inspirado pelo Front-end Mentor, um local que disponibiliza várias ideias de projeto para testar suas habilidades.",
         "main": "./projeto.html"
     },
@@ -55,7 +55,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/Mercado-Privado",
         "linkProj": "https://juhhsobrinho.github.io/Mercado-Privado/",
         "linkCodFake": "GitHub/MercPrivado.com",
-        "linkProjFake": "GitHub.io/MercPrivado.com",
+        "linkProjFake": "MercPrivado.com",
         "sobre": "Mercado-Privado desenvolvido com JavaScript, HTML, CSS e utilizando o empacotador Vite. Foi utilizado um arquivo JSON como banco de dados e o LocalStorage para armazenar o carrinho e o histórico da última compra.",
         "main": "./projeto.html"
     },
@@ -70,7 +70,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/nitro-Pomodoro",
         "linkProj": "https://juhhsobrinho.github.io/nitro-Pomodoro/",
         "linkCodFake": "GitHub/NitroPomo.com",
-        "linkProjFake": "GitHub.io/NitroPomo.com",
+        "linkProjFake": "NitroPomo.com",
         "sobre": "Nitro-Pomo desenvolvido com JavaScript, HTML, CSS e utilizando o empacotador Vite. Foram implementadas notificações e sons de alerta para informar o usuário quando o tempo se encerra. O projeto segue a lógica de Pomodoro para gerenciamento de tempo, que consiste em 25 minutos de trabalho seguidos por 5 minutos de descanso. Após completar 4 ciclos de trabalho, há uma pausa de 30 minutos.",
         "main": "./projeto.html"
     },
@@ -85,7 +85,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/nitroPomo-app",
         "linkProj": "https://drive.google.com/drive/folders/1AQRjpb81Uu3zUyImWoXNY6oK8dF5vzCS",
         "linkCodFake": "GitHub/NitroPomoApp.com",
-        "linkProjFake": "GitHub.io/NitroPomoApp.com",
+        "linkProjFake": "NitroPomoApp.com",
         "sobre": "Nitro-Pomo feito com React Native, Expo, CSS e utilizando o gerenciador de pacotes NPM do Node.js. Foram implementadas notificações e sons de alerta para atualizar o usuário e informar que o tempo acabou. O projeto utiliza a lógica de Pomodoro para o gerenciamento de tempo, que se resume em 25 minutos de trabalho e 5 minutos de descanso. Após completar 4 ciclos de trabalho, há uma pausa de 30 minutos.",
         "main": "./projeto.html"
     },
@@ -100,7 +100,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/ebuli-o",
         "linkProj": "https://juhhsobrinho.github.io/ebuli-o/view/index.html",
         "linkCodFake": "GitHub/ebuli-o.com",
-        "linkProjFake": "GitHub.io/ebuli-o.com",
+        "linkProjFake": "ebuli-o.com",
         "sobre": "Ebulição/Ebuli-o, feito em JavaScript, HTML, CSS e com a API de clima tempo. Projeto que informa temperatura, clima, sensação térmica, umidade, velocidade do vento, hora e disponibiliza a possibilidade de pesquisar sua cidade.",
         "main": "./projeto.html"
     },
@@ -115,7 +115,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/Ecom-Web",
         "linkProj": "https://juhhsobrinho.github.io/Ecom-Web/maps/mapa",
         "linkCodFake": "GitHub/Ecom.com",
-        "linkProjFake": "GitHub.io/Ecom.com",
+        "linkProjFake": "Ecom.com",
         "sobre": "ECOM é uma aplicação web desenvolvida utilizando React.js, CSS, HTML, Mapa, API de Geolocalização e Banco de Dados Firebase. Utilizamos o Mapa para fornecer informações sobre os postos e seus endereços, a API de geolocalização para converter endereços em latitude e longitude, com o objetivo de armazenar esses dados no Banco de Dados Firebase e utilizá-los no mapa.",
         "main": "./projeto.html"
     },
@@ -130,7 +130,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/Topa-Vinil-",
         "linkProj": "https://juhhsobrinho.github.io/Topa-Vinil-/",
         "linkCodFake": "GitHub/Topa-Vinil.com",
-        "linkProjFake": "GitHub.io/Topa-Vinil.com",
+        "linkProjFake": "Topa-Vinil.com",
         "sobre": "Topa um Vinil📀 ? Feito com JavaScript, HTML e CSS. apenas um gostinho BR, para aqueles que esqueceram da musica Brasileira ou precisam se encontrar.",
         "main": "./projeto.html"
     },    
@@ -145,7 +145,7 @@
         "linkCod": "https://github.com/JuhhSobrinho/Kanban",
         "linkProj": "#Indisponivel",
         "linkCodFake": "GitHub/Kanban.com",
-        "linkProjFake": "GitHub.io/Kanban.com",
+        "linkProjFake": "Kanban.com",
         "sobre": "Kanban-Post feito uma aplicação web, metodo kanban 'Utilizando Post-its', utilizando React.jsx para frontend e Node.js para backend. Alem disso, utilizado o firebase para banco de dados e netlify para hospedagem e servidor.",
         "main": "./projeto.html"
     }

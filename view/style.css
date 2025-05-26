@@ -725,6 +725,10 @@ main {
   transition: var(--hover-transition);
 }
 
+  #projectLink{
+    color: var(--link-color);
+  }
+
 #codigoLink:hover,
 #projectLink:hover {
   transition: var(--hover-transition);
@@ -992,6 +996,19 @@ main {
   .descricao {
     padding: 10px;
     height: auto;
+  }
+
+  .ficha-spans {
+  font-size: 15px;
+  padding: 5px;
+  transition: var(--hover-transition);
+}
+
+  #projectLink:hover {
+    transition: var(--hover-transition);
+    font-size: 15px;
+    padding: 4px;
+    color: #586f7c;
   }
 
   .line-project {
