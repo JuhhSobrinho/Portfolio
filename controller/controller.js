@@ -198,4 +198,4 @@ const checkLogo = setInterval(() => {
     logo.style.display = 'none';
     clearInterval(checkLogo); // para de checar
   }
-}, 800); // checa a cada 100ms
+}, 1); // checa a cada 100ms
