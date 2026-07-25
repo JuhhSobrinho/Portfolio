@@ -704,6 +704,47 @@ main {
   background-position: center;
 }
 
+.sem-imagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--header-background);
+}
+
+.mini-terminal {
+  width: 82%;
+  max-width: 320px;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #1a1a19;
+  border: 1px solid #2c2c2c;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.mini-terminal-barra {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background-color: #222222;
+}
+
+.mini-terminal-corpo {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mini-terminal-corpo .terminal-linha {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.mini-terminal-erro {
+  color: #b5585c;
+}
+
 .showcase-card-overlay {
   position: relative;
   z-index: 1;
@@ -736,6 +777,11 @@ main {
 .status-andamento {
   color: #d9a441;
   border: 1px solid #d9a441;
+}
+
+.status-descontinuado {
+  color: #b5585c;
+  border: 1px solid #b5585c;
 }
 
 .showcase-card.is-active {
@@ -1074,21 +1120,42 @@ main {
 }
 
 .img-ficha {
+  width: 100%;
+  max-width: 1300px;
   padding-top: 50px;
   display: flex;
   justify-content: space-around;
+  gap: 40px;
+}
+
+.sobre-project-img {
+  flex: 1;
+  min-width: 0;
 }
 
 .img-project {
   width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: 5px;
   filter: blur(3px);
   transition: var(--hover-transition);
 }
 
+.img-project.sem-imagem {
+  filter: none;
+  align-items: flex-end;
+  padding-bottom: 30px;
+}
+
+.projeto-container:hover .img-project.sem-imagem {
+  filter: none;
+}
+
 .projeto-container {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .projeto-container:hover .img-project {
@@ -1488,6 +1555,11 @@ main {
     border-radius: 5px;
     filter: blur(3px);
     transition: var(--hover-transition);
+  }
+
+  .img-project.sem-imagem {
+    aspect-ratio: 3 / 4;
+    padding-bottom: 20px;
   }
 
   .sobre-project-titulo {

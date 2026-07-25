@@ -329,6 +329,23 @@ function animarCards() {
   animate(cards, { opacity: [0, 1], y: [30, 0] }, { delay: stagger(0.06), duration: 0.5 });
 }
 
+/* ==================== Placeholder de "sem imagem": mini-terminal charmoso ==================== */
+function miniTerminalHTML() {
+  return `
+    <div class="mini-terminal">
+      <div class="mini-terminal-barra">
+        <span class="terminal-bolinha bolinha-vermelha"></span>
+        <span class="terminal-bolinha bolinha-amarela"></span>
+        <span class="terminal-bolinha bolinha-verde"></span>
+      </div>
+      <div class="mini-terminal-corpo">
+        <p class="terminal-linha"><span class="terminal-prompt">$</span> ls screenshot.png</p>
+        <p class="terminal-linha mini-terminal-erro">arquivo não encontrado</p>
+        <p class="terminal-linha terminal-cursor"><span class="terminal-prompt">$</span></p>
+      </div>
+    </div>`;
+}
+
 /* ==================== Showcase de projetos: carrossel com loop infinito ==================== */
 function configurarShowcase(bd) {
   if (!guias || !bd.length) return;
@@ -354,14 +371,19 @@ function configurarShowcase(bd) {
   }
 
   function statusClasse(status) {
-    return status === 'Desenvolvido' ? 'status-pronto' : 'status-andamento';
+    if (status === 'Desenvolvido') return 'status-pronto';
+    if (status === 'Descontinuado') return 'status-descontinuado';
+    return 'status-andamento';
   }
 
   function cardHTML(projeto, offset) {
     const estado = offset === 0 ? 'is-active' : 'is-adjacent';
+    const imagemHTML = projeto.img
+      ? `<div class="showcase-card-img" style="background-image: url('${projeto.img}');"></div>`
+      : `<div class="showcase-card-img sem-imagem">${miniTerminalHTML()}</div>`;
     return `
       <a class="showcase-card ${estado}" data-project-id="${projeto.id}" data-offset="${offset}">
-        <div class="showcase-card-img" style="background-image: url('${projeto.img}');"></div>
+        ${imagemHTML}
         <div class="showcase-card-overlay">
           <span class="showcase-status ${statusClasse(projeto.status)}">${projeto.status}</span>
           <h3 class="showcase-card-title">${projeto.nome}</h3>
@@ -485,11 +507,15 @@ carregarBancoDeDados()
     function dados() {
       const guiaAtual = bd[geTLocalStorage("AtualGuia")];
 
-      sectionImgFicha = `            
+      const imagemFicha = guiaAtual.img
+        ? `<img class="img-project" id="img-project" src="${guiaAtual.img}" alt="foto-do-projeto-${guiaAtual.nome}">`
+        : `<div class="img-project sem-imagem" id="img-project">${miniTerminalHTML()}</div>`;
+
+      sectionImgFicha = `
         <section class="sobre-project-img">
           <a class="projeto-container" style="${saturacion(guiaAtual.status)}">
             <h1 class="nome-project">${guiaAtual.nome}</h1>
-            <img class="img-project" id="img-project" src="${guiaAtual.img}" alt="foto-do-projeto-${guiaAtual.nome}">
+            ${imagemFicha}
           </a>
         </section>
 
