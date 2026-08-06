@@ -227,9 +227,9 @@
     {
         "id": "15",
         "nome": "EsToc",
-        "img": "./assets/estoc.png",
+        "img": "./assets/tisi-estoc.png",
         "icon": "./assets/estoc.png",
-        "status": "Descontinuado",
+        "status": "Descontinuado/Pronto",
         "descricao": "EsToc 📦, primeira versão do controle de estoque, o projeto mais antigo do portfólio.",
         "responsivo": "Sim",
         "linkCod": "https://github.com/JuhhSobrinho/EsToc",
