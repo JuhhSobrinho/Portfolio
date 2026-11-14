@@ -26,7 +26,7 @@
 }
 
 .meus-projetos {
-  background-color: transparent;
+  background: transparent !important;
 }
 
 /* ==================== Projetos (cards do GitHub) ==================== */
