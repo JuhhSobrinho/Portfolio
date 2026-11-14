@@ -10,8 +10,10 @@ import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model
    model/bd.json só complementa: demo, descrição e status quando o repo está cadastrado lá. */
 
 const USUARIO = 'juhhsobrinho';
-const CACHE_REPOS = 'githubReposCache_v2';
+const CACHE_REPOS = 'githubReposCache_v3';
 const CACHE_CAPAS = 'capasDemoCache';
+const CACHE_COMMITS = 'commitsCache';
+const TTL_COMMITS = 24 * 60 * 60 * 1000;
 const TTL_REPOS = 6 * 60 * 60 * 1000;
 const TTL_CAPAS = 7 * 24 * 60 * 60 * 1000;
 
@@ -123,7 +125,21 @@ function interpretarReadme(texto, owner, repo) {
     }
   }
 
-  return { imagem, funcionalidades: funcionalidades.slice(0, 6) };
+  // Parágrafos de texto corrido, sem títulos, imagens, badges, tabelas, código ou listas
+  const paragrafos = texto
+    .split(/\n\s*\n/)
+    .map(b => b.trim())
+    .filter(b => b && !/^(#|!|<|\||```|[-*]\s|\[!\[)/.test(b))
+    .map(b => b
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+      .replace(/[*_`]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim())
+    .filter(Boolean)
+    .slice(0, 3);
+
+  return { imagem, funcionalidades: funcionalidades.slice(0, 6), paragrafos };
 }
 
 async function buscarReadme(owner, repo) {
@@ -155,6 +171,8 @@ function repoParaProjeto(repo, cadastrados) {
     github: repo.html_url,
     demo: demoManual || repo.homepage || '',
     status: manual ? manual.status : '',
+    arquivado: repo.archived,
+    issues: repo.open_issues_count || 0,
     readme: null,
   };
 }
@@ -198,6 +216,50 @@ async function dadosDeFallback() {
     status: p.status,
     readme: null,
   }));
+}
+
+/* ---------- status resumido do projeto ---------- */
+function statusDoProjeto(p) {
+  if (p.arquivado) return { texto: 'Arquivado no GitHub', tom: 'parado' };
+
+  if (p.status) {
+    const s = p.status.toLowerCase();
+    if (s.includes('descontinuad')) return { texto: p.status, tom: 'parado' };
+    if (s.includes('desenvolvimento')) return { texto: p.status, tom: 'andamento' };
+    return { texto: p.status, tom: 'ativo' };
+  }
+
+  const dias = p.atualizadoEm ? (Date.now() - new Date(p.atualizadoEm).getTime()) / 86400000 : Infinity;
+  if (dias < 90) return { texto: 'Em atividade', tom: 'ativo' };
+  if (dias < 365) return { texto: 'Atualizado no último ano', tom: 'andamento' };
+  return { texto: 'Parado há mais de um ano', tom: 'parado' };
+}
+
+/* ---------- total de commits (carregado só ao abrir o modal) ---------- */
+async function buscarTotalCommits(owner, repo) {
+  const cache = lerCache(CACHE_COMMITS, TTL_COMMITS) || {};
+  const chave = `${owner}/${repo}`;
+  if (cache[chave] !== undefined) return cache[chave];
+
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`);
+    let total;
+    if (resp.status === 409) {
+      total = 0; // repositório vazio, sem commits
+    } else if (!resp.ok) {
+      return null;
+    } else {
+      // Com per_page=1, o número da última página do Link é o total de commits
+      const link = resp.headers.get('Link');
+      const ultima = link && link.match(/[?&]page=(\d+)>;\s*rel="last"/);
+      total = ultima ? Number(ultima[1]) : (await resp.json()).length;
+    }
+    cache[chave] = total;
+    gravarCache(CACHE_COMMITS, cache);
+    return total;
+  } catch (e) {
+    return null;
+  }
 }
 
 /* ---------- capa: screenshot / og:image da demo ---------- */
@@ -327,6 +389,12 @@ function iniciarModal() {
   });
 }
 
+function estatistica(valor, rotulo, elementoValor) {
+  const item = el('span', 'projeto-stat');
+  item.append(elementoValor || el('strong', '', valor), el('span', '', rotulo));
+  return item;
+}
+
 function abrirModal(p) {
   if (!modal) return;
 
@@ -343,6 +411,32 @@ function abrirModal(p) {
     (p.atualizadoEm ? ` · Atualizado ${new Date(p.atualizadoEm).toLocaleDateString('pt-BR')}` : '');
   modal.querySelector('#modal-nome').textContent = p.nome;
   modal.querySelector('#modal-sobre').textContent = p.sobre || p.descricao;
+  modal.dataset.projeto = p.nome;
+
+  const readmeEl = modal.querySelector('#modal-readme');
+  const paragrafos = p.readme?.paragrafos || [];
+  readmeEl.replaceChildren(...(paragrafos.length
+    ? paragrafos.map(t => el('p', '', t))
+    : [el('p', 'projeto-modal-vazio', 'Este projeto ainda não tem um README com descrição.')]));
+
+  const stats = modal.querySelector('#modal-stats');
+  const statCommits = el('strong', '', '…');
+  stats.replaceChildren(
+    estatistica(`★ ${p.estrelas}`, 'estrelas'),
+    estatistica(null, 'commits', statCommits),
+    estatistica(String(p.issues || 0), 'issues abertas'),
+    estatistica(p.atualizadoEm ? new Date(p.atualizadoEm).toLocaleDateString('pt-BR') : '—', 'última atualização')
+  );
+  buscarTotalCommits(p.owner, p.nome).then(total => {
+    if (modal.dataset.projeto === p.nome) statCommits.textContent = total === null ? '—' : String(total);
+  });
+
+  const statusModal = modal.querySelector('#modal-status');
+  const st = statusDoProjeto(p);
+  statusModal.replaceChildren(
+    el('span', 'projeto-modal-selo', 'Status'),
+    el('span', `projeto-status-tom tom-${st.tom}`, st.texto)
+  );
 
   const funcionalidades = modal.querySelector('#modal-funcionalidades');
   const itens = p.readme?.funcionalidades || [];
