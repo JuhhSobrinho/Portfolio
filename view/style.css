@@ -228,9 +228,11 @@ main {
   font-size: 50px;
   width: 40px;
   margin: 40px;
-  padding: 10px;
-  border-radius: 50%;
-  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  outline: none;
   cursor: pointer;
   transition: var(--hover-transition);
 }
@@ -241,7 +243,8 @@ main {
   margin: 50px;
   transition: var(--hover-transition);
   color: var(--link-color);
-  background-color: transparent;
+  background: none;
+  box-shadow: none;
 }
 
 .imagem-3d {
