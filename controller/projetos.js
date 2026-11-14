@@ -338,12 +338,16 @@ function aplicarImagem(capa, src) {
 /* ---------- cards ---------- */
 function criarCard(p) {
   const card = el('article', 'projeto-card');
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-label', `Ver detalhes de ${p.nome}`);
 
+  // Coluna da esquerda: capa e pontos principais
+  const lateral = el('div', 'projeto-card-lateral');
   const capa = criarCapa(p);
   capa.dataset.nome = p.nome;
 
-  const corpo = el('div', 'projeto-card-corpo');
-
+  const pontos = el('div', 'projeto-card-pontos');
   const topo = el('div', 'projeto-card-topo');
   topo.append(el('span', 'projeto-linguagem', p.linguagem || 'Sem linguagem'));
   if (p.status) topo.append(el('span', 'projeto-status', p.status));
@@ -356,16 +360,36 @@ function criarCard(p) {
       : 'Data indisponível')
   );
 
-  const botao = el('button', 'projeto-ver', 'Ver projeto');
-  botao.type = 'button';
-  botao.addEventListener('click', () => abrirModal(p));
-
   const links = el('div', 'projeto-links');
   links.append(link('GitHub', p.github));
   if (p.demo) links.append(link('Demo', p.demo));
 
-  corpo.append(topo, el('h3', 'projeto-nome', p.nome), el('p', 'projeto-descricao', p.descricao), meta, botao, links);
-  card.append(capa, corpo);
+  pontos.append(topo, meta, links);
+  lateral.append(capa, pontos);
+
+  // Coluna da direita: descrição real do projeto
+  const corpo = el('div', 'projeto-card-corpo');
+  const descricaoCompleta = p.sobre || p.readme?.paragrafos?.[0] || p.descricao;
+  corpo.append(
+    el('h3', 'projeto-nome', p.nome),
+    el('p', 'projeto-descricao-completa', descricaoCompleta),
+    el('span', 'projeto-abrir', 'Ver detalhes →')
+  );
+
+  card.append(lateral, corpo);
+
+  // O card inteiro abre o modal; links externos e teclado também
+  card.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    abrirModal(p);
+  });
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      abrirModal(p);
+    }
+  });
+
   return card;
 }
 

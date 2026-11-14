@@ -1,9 +1,82 @@
 /* ==================== Vitrine de projetos: capa, cards e modal ==================== */
 
+/* Card em duas colunas: capa e pontos à esquerda, descrição à direita */
+.projetos-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
+}
+
 .projeto-card {
+  flex-direction: row;
   padding: 0;
   overflow: hidden;
   gap: 0;
+  cursor: pointer;
+  min-height: 240px;
+}
+
+.projeto-card:focus-visible {
+  outline: 2px solid #6fe39a;
+  outline-offset: 3px;
+}
+
+.projeto-card-lateral {
+  width: 42%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(8, 153, 100, 0.2);
+}
+
+.projeto-card-lateral .projeto-capa {
+  aspect-ratio: 4 / 3;
+  border-bottom: none;
+}
+
+.projeto-card-pontos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+}
+
+.projeto-card-pontos .projeto-links {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.projeto-card .projeto-card-corpo {
+  padding: 22px 24px;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.projeto-descricao-completa {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #c6c5b9;
+}
+
+.projeto-abrir {
+  margin-top: auto;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #6fe39a;
+}
+
+.projeto-card:hover .projeto-abrir {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .projeto-card {
+    flex-direction: column;
+  }
+
+  .projeto-card-lateral {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(8, 153, 100, 0.2);
+  }
 }
 
 .projeto-card:hover .projeto-capa img {
