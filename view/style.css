@@ -237,12 +237,10 @@ main {
   transition: var(--hover-transition);
 }
 
+/* Mesmo hover dos ícones de contato: só muda a cor e sobe um pouco */
 .icon-midias:hover {
-  font-size: 60px;
-  width: 50px;
-  margin: 50px;
-  transition: var(--hover-transition);
   color: var(--link-color);
+  transform: translateY(-3px);
   background: none;
   box-shadow: none;
 }
