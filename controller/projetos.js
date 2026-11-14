@@ -54,11 +54,61 @@ function iniciarProjetos() {
     })
     .catch(async erro => {
       console.error('Projetos: falha ao atualizar.', erro);
-      if (salvo) return; // mantém o que já está na tela
-      mostrarStatus('GitHub indisponível agora. Mostrando os projetos cadastrados.');
       avisoFixo = true;
+      if (erro && erro.limite) {
+        mostrarRadar(erro.reset);
+      } else {
+        mostrarStatus('GitHub indisponível agora. Mostrando os projetos cadastrados.');
+      }
+      if (salvo) return; // mantém o que já está na tela
       aplicarDados(await dadosDeFallback());
     });
+}
+
+/* ---------- radar do submarino: aviso quando a cota da API do GitHub acaba ---------- */
+let timerRadar = null;
+
+function mostrarRadar(resetMs) {
+  const radar = document.getElementById('projetos-radar');
+  if (!radar) return;
+  if (statusEl) statusEl.hidden = true;
+
+  const varredura = el('div', 'radar-varredura');
+  const tela = el('div', 'radar-tela');
+  // Pontos fixos que piscam, como contatos no radar
+  [[28, 34], [62, 22], [70, 66], [40, 72]].forEach(([x, y], i) => {
+    const ponto = el('span', 'radar-ponto');
+    ponto.style.left = x + '%';
+    ponto.style.top = y + '%';
+    ponto.style.animationDelay = (i * 0.7) + 's';
+    tela.append(ponto);
+  });
+  tela.prepend(varredura);
+
+  const texto = el('div', 'radar-texto');
+  const contagem = el('p', 'radar-contagem');
+  texto.append(
+    el('h4', '', '⚓ Radar sem sinal'),
+    el('p', '', 'O submarino perdeu contato com o GitHub: a cota de requisições da API foi esgotada.'),
+    el('p', '', 'Por enquanto, mostrando os projetos cadastrados localmente.'),
+    contagem
+  );
+
+  radar.replaceChildren(tela, texto);
+  radar.hidden = false;
+
+  const atualizarContagem = () => {
+    const minutos = Math.ceil((resetMs - Date.now()) / 60000);
+    if (minutos > 0) {
+      contagem.textContent = `Próximo contato em cerca de ${minutos} min.`;
+    } else {
+      contagem.textContent = 'Contato restabelecido: recarregue a página para atualizar.';
+      clearInterval(timerRadar);
+    }
+  };
+  atualizarContagem();
+  clearInterval(timerRadar);
+  timerRadar = setInterval(atualizarContagem, 30000);
 }
 
 function aplicarDados(dados) {
@@ -202,7 +252,14 @@ function repoParaProjeto(repo, cadastrados) {
 
 async function buscarProjetos() {
   const resp = await fetch(`https://api.github.com/users/${USUARIO}/repos?per_page=100&type=owner&sort=pushed`);
-  if (!resp.ok) throw new Error(`GitHub API respondeu ${resp.status}`);
+  if (!resp.ok) {
+    // 403/429 com limite zerado = cota de requisições esgotada (o radar mostra isso)
+    if (resp.status === 403 || resp.status === 429) {
+      const reset = Number(resp.headers.get('x-ratelimit-reset')) * 1000;
+      throw { limite: true, reset: reset || Date.now() + 60 * 60 * 1000 };
+    }
+    throw new Error(`GitHub API respondeu ${resp.status}`);
+  }
   const repos = (await resp.json()).filter(r => !r.fork);
   const cadastrados = (await carregarBancoDeDados()) || [];
 
