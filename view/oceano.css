@@ -21,9 +21,12 @@
 }
 
 /* Seções com fundo opaco escondiam o oceano: deixa semitransparente */
-.sobre,
-.meus-projetos {
+.sobre {
   background-color: rgba(16, 16, 16, 0.55);
+}
+
+.meus-projetos {
+  background-color: transparent;
 }
 
 /* ==================== Projetos (cards do GitHub) ==================== */
