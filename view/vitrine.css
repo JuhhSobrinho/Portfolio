@@ -1,82 +1,9 @@
 /* ==================== Vitrine de projetos: capa, cards e modal ==================== */
 
-/* Card em duas colunas: capa e pontos à esquerda, descrição à direita */
-.projetos-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
-}
-
 .projeto-card {
-  flex-direction: row;
   padding: 0;
   overflow: hidden;
   gap: 0;
-  cursor: pointer;
-  min-height: 240px;
-}
-
-.projeto-card:focus-visible {
-  outline: 2px solid #6fe39a;
-  outline-offset: 3px;
-}
-
-.projeto-card-lateral {
-  width: 42%;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(8, 153, 100, 0.2);
-}
-
-.projeto-card-lateral .projeto-capa {
-  aspect-ratio: 4 / 3;
-  border-bottom: none;
-}
-
-.projeto-card-pontos {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px;
-}
-
-.projeto-card-pontos .projeto-links {
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.projeto-card .projeto-card-corpo {
-  padding: 22px 24px;
-  gap: 12px;
-  justify-content: flex-start;
-}
-
-.projeto-descricao-completa {
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: #c6c5b9;
-}
-
-.projeto-abrir {
-  margin-top: auto;
-  font-family: monospace;
-  font-size: 0.8rem;
-  color: #6fe39a;
-}
-
-.projeto-card:hover .projeto-abrir {
-  text-decoration: underline;
-}
-
-@media (max-width: 640px) {
-  .projeto-card {
-    flex-direction: column;
-  }
-
-  .projeto-card-lateral {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(8, 153, 100, 0.2);
-  }
 }
 
 .projeto-card:hover .projeto-capa img {
@@ -160,7 +87,8 @@
 /* ==================== Modal ==================== */
 
 .projeto-modal {
-  width: min(680px, calc(100% - 32px));
+  width: min(1280px, calc(100% - 48px));
+  height: min(880px, calc(100vh - 48px));
   max-height: calc(100vh - 48px);
   padding: 0;
   border: 1px solid rgba(8, 153, 100, 0.35);
@@ -239,13 +167,85 @@
   padding: 24px;
 }
 
-.projeto-modal-corpo {
+/* Layout em duas colunas: esquerda (imagem e principais pontos), direita (descrição) */
+.projeto-modal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  height: 100%;
+}
+
+.projeto-modal-esquerda,
+.projeto-modal-direita {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.projeto-modal-esquerda {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 22px 24px 26px;
-  overflow-y: auto;
-  max-height: calc(100vh - 48px - 40vw);
+  gap: 14px;
+  padding: 24px;
+  background: #101010;
+  border-right: 1px solid rgba(8, 153, 100, 0.2);
+}
+
+.projeto-modal-esquerda .projeto-modal-capa {
+  border-radius: 10px;
+  border: 1px solid rgba(8, 153, 100, 0.2);
+  aspect-ratio: 16 / 10;
+}
+
+.projeto-modal-direita {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 40px 44px 36px;
+}
+
+.projeto-modal-direita .projeto-modal-nome {
+  font-size: 2rem;
+}
+
+.projeto-modal-direita .projeto-modal-sobre {
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.projeto-modal-direita .projeto-modal-readme {
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.projeto-modal-esquerda .projeto-modal-lista {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 760px) {
+  .projeto-modal {
+    height: auto;
+    max-height: calc(100vh - 32px);
+    width: calc(100% - 24px);
+    overflow-y: auto;
+  }
+
+  .projeto-modal-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .projeto-modal-esquerda,
+  .projeto-modal-direita {
+    overflow: visible;
+  }
+
+  .projeto-modal-esquerda {
+    border-right: none;
+    border-bottom: 1px solid rgba(8, 153, 100, 0.2);
+  }
+
+  .projeto-modal-direita {
+    padding: 28px 22px 32px;
+  }
 }
 
 .projeto-modal-meta {
@@ -402,11 +402,6 @@
   background: #6fe39a;
 }
 
-@media (max-width: 600px) {
-  .projeto-modal-corpo {
-    max-height: none;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .projeto-modal[open],

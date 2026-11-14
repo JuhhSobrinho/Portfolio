@@ -302,20 +302,24 @@
         <script type="module" src="../controller/controller.js"></script>
         <dialog class="projeto-modal" id="projeto-modal" aria-labelledby="modal-nome">
             <button type="button" class="projeto-modal-fechar" id="modal-fechar" aria-label="Fechar">✕</button>
-            <div class="projeto-modal-capa" id="modal-capa"></div>
-            <div class="projeto-modal-corpo">
-                <p class="projeto-modal-meta" id="modal-meta"></p>
-                <h2 class="projeto-modal-nome" id="modal-nome"></h2>
-                <p class="projeto-modal-sobre" id="modal-sobre"></p>
-                <div class="projeto-modal-stats" id="modal-stats"></div>
-                <p class="projeto-modal-status" id="modal-status"></p>
-                <h3 class="projeto-modal-subtitulo">Sobre o README</h3>
-                <div class="projeto-modal-readme" id="modal-readme"></div>
-                <h3 class="projeto-modal-subtitulo" id="modal-sub-func">Funcionalidades</h3>
-                <ul class="projeto-modal-lista" id="modal-funcionalidades"></ul>
-                <h3 class="projeto-modal-subtitulo">Tecnologias</h3>
-                <ul class="projeto-modal-techs" id="modal-techs"></ul>
-                <div class="projeto-links projeto-modal-links" id="modal-links"></div>
+            <div class="projeto-modal-layout">
+                <aside class="projeto-modal-esquerda">
+                    <div class="projeto-modal-capa" id="modal-capa"></div>
+                    <h3 class="projeto-modal-subtitulo" id="modal-sub-func">Principais pontos</h3>
+                    <ul class="projeto-modal-lista" id="modal-funcionalidades"></ul>
+                    <div class="projeto-modal-stats" id="modal-stats"></div>
+                    <p class="projeto-modal-status" id="modal-status"></p>
+                    <h3 class="projeto-modal-subtitulo">Tecnologias</h3>
+                    <ul class="projeto-modal-techs" id="modal-techs"></ul>
+                    <div class="projeto-links projeto-modal-links" id="modal-links"></div>
+                </aside>
+                <div class="projeto-modal-direita">
+                    <p class="projeto-modal-meta" id="modal-meta"></p>
+                    <h2 class="projeto-modal-nome" id="modal-nome"></h2>
+                    <p class="projeto-modal-sobre" id="modal-sobre"></p>
+                    <h3 class="projeto-modal-subtitulo">Sobre o README</h3>
+                    <div class="projeto-modal-readme" id="modal-readme"></div>
+                </div>
             </div>
         </dialog>
         <script type="module" src="../controller/projetos.js"></script>
