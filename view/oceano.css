@@ -29,6 +29,31 @@
   background: transparent !important;
 }
 
+/* Ícones de redes do topo: sem fundo, sombra, filtro, contorno ou pseudo-elemento em nenhum estado */
+.midias a,
+.midias a:hover,
+.midias a:focus,
+.midias a:active,
+.midias .icon-midias,
+.midias .icon-midias:hover,
+.midias .icon-midias:focus,
+.midias .icon-midias:active {
+  background: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  border: none !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.midias a::before,
+.midias a::after,
+.midias .icon-midias::before,
+.midias .icon-midias::after {
+  content: none !important;
+  display: none !important;
+}
+
 /* ==================== Projetos (cards do GitHub) ==================== */
 
 .meus-projetos {
