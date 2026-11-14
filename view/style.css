@@ -241,7 +241,7 @@ main {
   margin: 50px;
   transition: var(--hover-transition);
   color: var(--link-color);
-  background-color: rgba(8, 153, 100, 0.12);
+  background-color: transparent;
 }
 
 .imagem-3d {
