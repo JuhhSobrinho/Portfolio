@@ -84,6 +84,41 @@
   outline: none;
 }
 
+/* ==================== Seções: em destaque e mais recentes ==================== */
+
+.projetos-secao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.projetos-secao[hidden],
+.projetos-divisor[hidden] {
+  display: none;
+}
+
+.projetos-secao .projetos-grid {
+  width: 100%;
+}
+
+.projetos-subtitulo {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #6fe39a;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 12px 0 4px;
+  align-self: flex-start;
+}
+
+.projetos-divisor {
+  width: 100%;
+  height: 1px;
+  margin: 36px 0 20px;
+  background: linear-gradient(to right, transparent, #089964 25%, #089964 75%, transparent);
+}
+
 /* ==================== Modal ==================== */
 
 .projeto-modal {

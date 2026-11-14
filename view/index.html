@@ -233,22 +233,16 @@
             <section class="meus-projetos" id="Projetos">
 
                 <h2 class="titulo-sobre">Meus Projetos</h2>
-                <div class="projetos-controles">
-                    <label class="projetos-campo">
-                        <span>Linguagem</span>
-                        <select id="filtro-linguagem"></select>
-                    </label>
-                    <label class="projetos-campo">
-                        <span>Ordenar por</span>
-                        <select id="ordenar-projetos">
-                            <option value="estrelas">Mais estrelas</option>
-                            <option value="recentes">Atualizados recentemente</option>
-                            <option value="nome">Nome (A–Z)</option>
-                        </select>
-                    </label>
-                </div>
                 <p class="projetos-status" id="projetos-status">Carregando projetos do GitHub...</p>
-                <div class="projetos-grid" id="projetos-grid"></div>
+                <section class="projetos-secao" id="secao-destaque" hidden>
+                    <h3 class="projetos-subtitulo">Em destaque</h3>
+                    <div class="projetos-grid" id="projetos-destaque"></div>
+                </section>
+                <div class="projetos-divisor" id="projetos-divisor" hidden></div>
+                <section class="projetos-secao">
+                    <h3 class="projetos-subtitulo">Mais recentes</h3>
+                    <div class="projetos-grid" id="projetos-grid"></div>
+                </section>
                 <div class="line"></div>
             </section>
 

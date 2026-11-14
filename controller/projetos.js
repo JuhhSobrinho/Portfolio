@@ -12,33 +12,31 @@ import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model
 const USUARIO = 'juhhsobrinho';
 const CACHE_REPOS = 'githubReposCache';
 // Quando o formato dos dados muda, aumente a versão: o cache antigo é ignorado sozinho
-const VERSAO_CACHE = 4;
+const VERSAO_CACHE = 5;
 const CACHE_CAPAS = 'capasDemoCache';
 const CACHE_COMMITS = 'commitsCache';
 const TTL_COMMITS = 24 * 60 * 60 * 1000;
 const TTL_REPOS = 60 * 60 * 1000; // 1h: depois disso, atualiza em segundo plano
 const TTL_CAPAS = 7 * 24 * 60 * 60 * 1000;
 
-const grid = document.getElementById('projetos-grid');
-const filtroLinguagem = document.getElementById('filtro-linguagem');
-const ordenarProjetos = document.getElementById('ordenar-projetos');
+const gridDestaque = document.getElementById('projetos-destaque');
+const gridRecentes = document.getElementById('projetos-grid');
+const secaoDestaque = document.getElementById('secao-destaque');
+const divisor = document.getElementById('projetos-divisor');
 const statusEl = document.getElementById('projetos-status');
 const modal = document.getElementById('projeto-modal');
 
-if (grid && filtroLinguagem && ordenarProjetos) iniciarProjetos();
+if (gridDestaque && gridRecentes) iniciarProjetos();
 
 const COMPARADORES = {
   estrelas: (a, b) => b.estrelas - a.estrelas || a.nome.localeCompare(b.nome),
   recentes: (a, b) => new Date(b.atualizadoEm || 0) - new Date(a.atualizadoEm || 0),
-  nome: (a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }),
 };
 
 let todos = [];
 let avisoFixo = false;
 
 function iniciarProjetos() {
-  filtroLinguagem.addEventListener('change', renderizar);
-  ordenarProjetos.addEventListener('change', renderizar);
   iniciarModal();
 
   // Com cache, mostra na hora e atualiza em segundo plano se estiver expirado
@@ -65,9 +63,6 @@ function iniciarProjetos() {
 
 function aplicarDados(dados) {
   todos = dados;
-  const valorAnterior = filtroLinguagem.value;
-  preencherLinguagens();
-  filtroLinguagem.value = valorAnterior;
   renderizar();
 }
 
@@ -198,6 +193,7 @@ function repoParaProjeto(repo, cadastrados) {
     github: repo.html_url,
     demo: demoManual || repo.homepage || '',
     status: manual ? manual.status : '',
+    destaque: !!(manual && manual.destaque),
     arquivado: repo.archived,
     issues: repo.open_issues_count || 0,
     readme: null,
@@ -238,6 +234,7 @@ async function dadosDeFallback() {
     github: p.linkCod,
     demo: p.linkProj && !p.linkProj.startsWith('#') ? p.linkProj : '',
     status: p.status,
+    destaque: !!p.destaque,
     readme: null,
   }));
 }
@@ -384,37 +381,48 @@ function criarCard(p) {
   return card;
 }
 
+/* Em destaque: os marcados com "destaque": true no model/bd.json;
+   sem nenhum marcado, os três com mais estrelas.
+   Mais recentes: todos os demais, do mais atualizado para o menos. */
 function renderizar() {
-  const linguagem = filtroLinguagem.value;
-  const ordem = ordenarProjetos.value;
+  const marcados = todos.filter(p => p.destaque);
+  const emDestaque = marcados.length
+    ? marcados
+    : [...todos].sort(COMPARADORES.estrelas).slice(0, 3);
+  const nomesDestaque = new Set(emDestaque.map(p => p.nome));
+  const recentes = todos
+    .filter(p => !nomesDestaque.has(p.nome))
+    .sort(COMPARADORES.recentes);
 
-  const lista = todos
-    .filter(p => !linguagem || p.linguagem === linguagem)
-    .sort(COMPARADORES[ordem] || COMPARADORES.estrelas);
+  const cardsDestaque = emDestaque.map(criarCard);
+  const cardsRecentes = recentes.map(criarCard);
+  gridDestaque.replaceChildren(...cardsDestaque);
+  gridRecentes.replaceChildren(...cardsRecentes);
 
-  const cards = lista.map(criarCard);
-  grid.replaceChildren(...cards);
+  const temDestaque = emDestaque.length > 0;
+  secaoDestaque.hidden = !temDestaque;
+  divisor.hidden = !temDestaque || recentes.length === 0;
 
   // Capas carregam uma a uma, para não disparar muitas chamadas de uma vez
-  lista.reduce((antes, p, i) => antes.then(async () => {
-    const src = await capaDoProjeto(p);
-    if (src && cards[i]) aplicarImagem(cards[i].querySelector('.projeto-capa'), src);
-  }), Promise.resolve());
+  carregarCapas([
+    ...emDestaque.map((p, i) => [p, cardsDestaque[i]]),
+    ...recentes.map((p, i) => [p, cardsRecentes[i]]),
+  ]);
 
-  if (!lista.length) {
-    mostrarStatus('Nenhum projeto com esse filtro.');
+  if (!todos.length) {
+    mostrarStatus('Nenhum projeto encontrado.');
   } else if (statusEl && !avisoFixo) {
     statusEl.hidden = true;
   }
 }
 
-function preencherLinguagens() {
-  const linguagens = [...new Set(todos.map(p => p.linguagem).filter(Boolean))].sort();
-  filtroLinguagem.replaceChildren(
-    new Option('Todas', ''),
-    ...linguagens.map(l => new Option(l, l))
-  );
+function carregarCapas(pares) {
+  pares.reduce((antes, [p, card]) => antes.then(async () => {
+    const src = await capaDoProjeto(p);
+    if (src && card) aplicarImagem(card.querySelector('.projeto-capa'), src);
+  }), Promise.resolve());
 }
+
 
 /* ---------- modal ---------- */
 function iniciarModal() {
