@@ -4,9 +4,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="oceano.css">
+        <link rel="stylesheet" href="vitrine.css">
         <link rel="shortcut icon" href="./assets/dev.svg" type="image/x-icon">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
         <!-- Animação: GSAP + ScrollTrigger (timelines e reveals no scroll) -->
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -23,7 +24,8 @@
     </head>
 
     <body>
-        <div id="particles-js"></div>
+        <div id="particles-js"><canvas id="oceano-ascii" aria-hidden="true"></canvas></div>
+        <div class="oceano-veu" aria-hidden="true"></div>
         <main>
             <nav class="header-parado">
                 <ul class="header-parado-ul">
@@ -167,7 +169,7 @@
 
             <section>
                 <div class="habilidades">
-                    <h2 class="titulo-sobre">Hard Skills</h2>
+                    <h2 class="titulo-sobre">Tecnologias</h2>
                     <div class="habilidades-card">
                         <div class="git-stats" id="git-stats">
                             <p class="git-stats-titulo">Linguagens no GitHub</p>
@@ -231,16 +233,22 @@
             <section class="meus-projetos" id="Projetos">
 
                 <h2 class="titulo-sobre">Meus Projetos</h2>
-                <section class="menu-projects" id="home">
-                    <button type="button" class="showcase-arrow showcase-prev" aria-label="Projeto anterior">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <nav id="guias" class="showcase-track">
-                    </nav>
-                    <button type="button" class="showcase-arrow showcase-next" aria-label="Próximo projeto">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                </section>
+                <div class="projetos-controles">
+                    <label class="projetos-campo">
+                        <span>Linguagem</span>
+                        <select id="filtro-linguagem"></select>
+                    </label>
+                    <label class="projetos-campo">
+                        <span>Ordenar por</span>
+                        <select id="ordenar-projetos">
+                            <option value="estrelas">Mais estrelas</option>
+                            <option value="recentes">Atualizados recentemente</option>
+                            <option value="nome">Nome (A–Z)</option>
+                        </select>
+                    </label>
+                </div>
+                <p class="projetos-status" id="projetos-status">Carregando projetos do GitHub...</p>
+                <div class="projetos-grid" id="projetos-grid"></div>
                 <div class="line"></div>
             </section>
 
@@ -292,6 +300,22 @@
             </section>
         </main>
         <script type="module" src="../controller/controller.js"></script>
+        <dialog class="projeto-modal" id="projeto-modal" aria-labelledby="modal-nome">
+            <button type="button" class="projeto-modal-fechar" id="modal-fechar" aria-label="Fechar">✕</button>
+            <div class="projeto-modal-capa" id="modal-capa"></div>
+            <div class="projeto-modal-corpo">
+                <p class="projeto-modal-meta" id="modal-meta"></p>
+                <h2 class="projeto-modal-nome" id="modal-nome"></h2>
+                <p class="projeto-modal-sobre" id="modal-sobre"></p>
+                <h3 class="projeto-modal-subtitulo" id="modal-sub-func">Funcionalidades</h3>
+                <ul class="projeto-modal-lista" id="modal-funcionalidades"></ul>
+                <h3 class="projeto-modal-subtitulo">Tecnologias</h3>
+                <ul class="projeto-modal-techs" id="modal-techs"></ul>
+                <div class="projeto-links projeto-modal-links" id="modal-links"></div>
+            </div>
+        </dialog>
+        <script type="module" src="../controller/projetos.js"></script>
+        <script type="module" src="../controller/oceano.js"></script>
 
     </body>
 

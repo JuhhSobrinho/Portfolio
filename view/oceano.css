@@ -1,0 +1,177 @@
+/* ==================== Oceano ASCII (fundo) ==================== */
+
+/* Canvas fixo atrás de todo o conteúdo (o #particles-js já é fixo, z-index -1) */
+#particles-js {
+  pointer-events: none;
+}
+
+#oceano-ascii {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* Véu escuro: reduz o contraste do fundo atrás do conteúdo */
+.oceano-veu {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(11, 13, 16, 0.15) 0%, rgba(11, 13, 16, 0.6) 100%);
+}
+
+/* Seções com fundo opaco escondiam o oceano: deixa semitransparente */
+.sobre,
+.meus-projetos {
+  background-color: rgba(16, 16, 16, 0.55);
+}
+
+/* ==================== Projetos (cards do GitHub) ==================== */
+
+.meus-projetos {
+  padding: 40px 16px 20px;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.projetos-controles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 8px 0 16px;
+}
+
+.projetos-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.projetos-campo span {
+  font-size: 0.75rem;
+  color: #089964;
+}
+
+.projetos-campo select {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #c6c5b9;
+  background: #1e1e1e;
+  border: 1px solid rgba(8, 153, 100, 0.5);
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.projetos-campo select:focus-visible {
+  outline: 2px solid #089964;
+  outline-offset: 2px;
+}
+
+.projetos-status {
+  font-size: 0.85rem;
+  color: #9aa6a0;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.projetos-status[hidden] {
+  display: none;
+}
+
+.projetos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  width: 100%;
+  padding: 12px 0 24px;
+  box-sizing: border-box;
+}
+
+.projeto-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 12px;
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(8, 153, 100, 0.22);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.projeto-card:hover {
+  transform: translateY(-4px);
+  border-color: #089964;
+}
+
+.projeto-card-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.projeto-linguagem {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #6fe39a;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 227, 154, 0.35);
+}
+
+.projeto-status {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #c98500;
+}
+
+.projeto-nome {
+  font-size: 1.05rem;
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.projeto-descricao {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #c6c5b9;
+  flex: 1;
+}
+
+.projeto-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.75rem;
+  color: #9aa6a0;
+}
+
+.projeto-links {
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.projeto-link {
+  font-size: 0.85rem;
+  color: #089964;
+  border-bottom: 1px solid transparent;
+}
+
+.projeto-link:hover,
+.projeto-link:focus-visible {
+  color: #6fe39a;
+  border-bottom-color: #6fe39a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projeto-card {
+    transition: none;
+  }
+}

@@ -659,5 +659,3 @@ function title() {
   type();
 }
 
-
-particulas();
