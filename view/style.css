@@ -225,6 +225,7 @@ main {
 }
 
 .icon-midias {
+  position: relative;
   font-size: 50px;
   width: 40px;
   margin: 40px;
@@ -237,10 +238,11 @@ main {
   transition: var(--hover-transition);
 }
 
-/* Mesmo hover dos ícones de contato: só muda a cor e sobe um pouco */
+/* Mesmo hover dos ícones de contato: só muda a cor e sobe um pouco.
+   Usa "top" em vez de "transform", porque o GSAP grava transform inline nesses ícones */
 .icon-midias:hover {
   color: var(--link-color);
-  transform: translateY(-3px);
+  top: -3px;
   background: none;
   box-shadow: none;
 }
