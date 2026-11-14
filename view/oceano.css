@@ -46,14 +46,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.midias a::before,
-.midias a::after,
-.midias .icon-midias::before,
-.midias .icon-midias::after {
-  content: none !important;
-  display: none !important;
-}
-
 /* ==================== Projetos (cards do GitHub) ==================== */
 
 .meus-projetos {
