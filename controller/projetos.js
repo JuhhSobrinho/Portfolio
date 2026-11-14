@@ -10,11 +10,13 @@ import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model
    model/bd.json só complementa: demo, descrição e status quando o repo está cadastrado lá. */
 
 const USUARIO = 'juhhsobrinho';
-const CACHE_REPOS = 'githubReposCache_v3';
+const CACHE_REPOS = 'githubReposCache';
+// Quando o formato dos dados muda, aumente a versão: o cache antigo é ignorado sozinho
+const VERSAO_CACHE = 4;
 const CACHE_CAPAS = 'capasDemoCache';
 const CACHE_COMMITS = 'commitsCache';
 const TTL_COMMITS = 24 * 60 * 60 * 1000;
-const TTL_REPOS = 6 * 60 * 60 * 1000;
+const TTL_REPOS = 60 * 60 * 1000; // 1h: depois disso, atualiza em segundo plano
 const TTL_CAPAS = 7 * 24 * 60 * 60 * 1000;
 
 const grid = document.getElementById('projetos-grid');
@@ -39,20 +41,34 @@ function iniciarProjetos() {
   ordenarProjetos.addEventListener('change', renderizar);
   iniciarModal();
 
-  mostrarStatus('Carregando projetos do GitHub...');
+  // Com cache, mostra na hora e atualiza em segundo plano se estiver expirado
+  const salvo = lerCacheRepos();
+  if (salvo) {
+    aplicarDados(salvo.dados);
+    if (!salvo.expirado) return;
+  } else {
+    mostrarStatus('Carregando projetos do GitHub...');
+  }
 
   buscarProjetos()
+    .then(novos => {
+      if (!salvo || JSON.stringify(novos) !== JSON.stringify(salvo.dados)) aplicarDados(novos);
+    })
     .catch(async erro => {
-      console.error('Projetos: GitHub indisponível, usando model/bd.json.', erro);
+      console.error('Projetos: falha ao atualizar.', erro);
+      if (salvo) return; // mantém o que já está na tela
       mostrarStatus('GitHub indisponível agora. Mostrando os projetos cadastrados.');
       avisoFixo = true;
-      return dadosDeFallback();
-    })
-    .then(dados => {
-      todos = dados;
-      preencherLinguagens();
-      renderizar();
+      aplicarDados(await dadosDeFallback());
     });
+}
+
+function aplicarDados(dados) {
+  todos = dados;
+  const valorAnterior = filtroLinguagem.value;
+  preencherLinguagens();
+  filtroLinguagem.value = valorAnterior;
+  renderizar();
 }
 
 /* ---------- utilidades de cache e DOM ---------- */
@@ -64,9 +80,20 @@ function lerCache(chave, ttl) {
   return null;
 }
 
+// Lê a lista de projetos: retorna mesmo expirada (para mostrar na hora), desde que a versão bata
+function lerCacheRepos() {
+  try {
+    const c = geTLocalStorage(CACHE_REPOS);
+    if (c && c.versao === VERSAO_CACHE && Array.isArray(c.dados)) {
+      return { dados: c.dados, expirado: Date.now() - c.quando >= TTL_REPOS };
+    }
+  } catch (e) { /* localStorage indisponível */ }
+  return null;
+}
+
 function gravarCache(chave, dados) {
   try {
-    seTLocarStorage(chave, { quando: Date.now(), dados });
+    seTLocarStorage(chave, { quando: Date.now(), versao: VERSAO_CACHE, dados });
   } catch (e) { /* localStorage indisponível */ }
 }
 
@@ -178,9 +205,6 @@ function repoParaProjeto(repo, cadastrados) {
 }
 
 async function buscarProjetos() {
-  const cache = lerCache(CACHE_REPOS, TTL_REPOS);
-  if (cache) return cache;
-
   const resp = await fetch(`https://api.github.com/users/${USUARIO}/repos?per_page=100&type=owner&sort=pushed`);
   if (!resp.ok) throw new Error(`GitHub API respondeu ${resp.status}`);
   const repos = (await resp.json()).filter(r => !r.fork);
