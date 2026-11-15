@@ -17,7 +17,7 @@ import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model
 const USUARIO = 'juhhsobrinho';
 const CACHE_REPOS = 'githubReposCache';
 // Quando o formato dos dados muda, aumente a versão: o cache antigo é ignorado sozinho
-const VERSAO_CACHE = 6;
+const VERSAO_CACHE = 7;
 const CACHE_README = 'readmesCache';
 const CACHE_CAPAS = 'capasDemoCache';
 const CACHE_COMMITS = 'commitsCache';
@@ -305,6 +305,7 @@ function repoParaProjeto(repo, cadastrados) {
     demo: demoManual || repo.homepage || '',
     status: manual ? manual.status : '',
     destaque: !!(manual && manual.destaque),
+    capa: (manual && manual.capa) || '',
     arquivado: repo.archived,
     issues: repo.open_issues_count || 0,
   };
@@ -347,6 +348,7 @@ async function dadosDeFallback() {
     demo: p.linkProj && !p.linkProj.startsWith('#') ? p.linkProj : '',
     status: p.status,
     destaque: !!p.destaque,
+    capa: p.capa || '',
   }));
 }
 
@@ -397,15 +399,18 @@ async function buscarTotalCommits(owner, repo) {
 /* ---------- capa: screenshot / og:image da demo ---------- */
 async function capaDaDemo(demo) {
   const capas = lerCache(CACHE_CAPAS, TTL_CAPAS) || {};
-  if (capas[demo] !== undefined) return capas[demo];
+  // Só usa o cache se tiver imagem: resultados vazios (cota esgotada, erro) não ficam guardados
+  if (capas[demo]) return capas[demo];
 
   try {
     const resp = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(demo)}&screenshot=true&meta=false`);
     if (!resp.ok) return '';
     const json = await resp.json();
     const imagem = json?.data?.screenshot?.url || json?.data?.image?.url || '';
-    capas[demo] = imagem;
-    gravarCache(CACHE_CAPAS, capas);
+    if (imagem) {
+      capas[demo] = imagem;
+      gravarCache(CACHE_CAPAS, capas);
+    }
     return imagem;
   } catch (e) {
     return '';
@@ -413,6 +418,8 @@ async function capaDaDemo(demo) {
 }
 
 async function capaDoProjeto(p) {
+  // 1. Capa definida no bd.json (imagem do próprio repositório): não depende de nenhuma API
+  if (p.capa) return p.capa;
   if (p.demo) {
     const imagem = await capaDaDemo(p.demo);
     if (imagem) return imagem;
