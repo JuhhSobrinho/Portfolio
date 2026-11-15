@@ -1,7 +1,12 @@
 import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model/model.js';
 
 /* ==================== Projetos: vitrine gerada a partir do GitHub ====================
-   Busca os repositórios de juhhsobrinho (sem forks), o README de cada um e monta os cards.
+   Busca os repositórios de juhhsobrinho (sem forks) e monta os cards.
+   Para ficar rápido:
+     - a lista aparece assim que os repositórios chegam (sem esperar READMEs);
+     - o README só é buscado quando o modal abre ou quando a capa precisa dele;
+     - as capas carregam em fila (3 por vez) e só quando o card entra na tela;
+     - model/bd.json é lido junto com os repositórios.
    Capa, em ordem de prioridade:
      1. screenshot da demo (serviço Microlink)
      2. og:image da demo (mesma chamada)
@@ -12,12 +17,15 @@ import { carregarBancoDeDados, seTLocarStorage, geTLocalStorage } from '../model
 const USUARIO = 'juhhsobrinho';
 const CACHE_REPOS = 'githubReposCache';
 // Quando o formato dos dados muda, aumente a versão: o cache antigo é ignorado sozinho
-const VERSAO_CACHE = 5;
+const VERSAO_CACHE = 6;
+const CACHE_README = 'readmesCache';
 const CACHE_CAPAS = 'capasDemoCache';
 const CACHE_COMMITS = 'commitsCache';
 const TTL_COMMITS = 24 * 60 * 60 * 1000;
 const TTL_REPOS = 60 * 60 * 1000; // 1h: depois disso, atualiza em segundo plano
 const TTL_CAPAS = 7 * 24 * 60 * 60 * 1000;
+const TTL_README = 7 * 24 * 60 * 60 * 1000;
+const LIMITE_CAPAS = 3; // quantas capas carregam ao mesmo tempo
 
 const gridDestaque = document.getElementById('projetos-destaque');
 const gridRecentes = document.getElementById('projetos-grid');
@@ -26,8 +34,6 @@ const divisor = document.getElementById('projetos-divisor');
 const statusEl = document.getElementById('projetos-status');
 const modal = document.getElementById('projeto-modal');
 
-if (gridDestaque && gridRecentes) iniciarProjetos();
-
 const COMPARADORES = {
   estrelas: (a, b) => b.estrelas - a.estrelas || a.nome.localeCompare(b.nome),
   recentes: (a, b) => new Date(b.atualizadoEm || 0) - new Date(a.atualizadoEm || 0),
@@ -35,6 +41,23 @@ const COMPARADORES = {
 
 let todos = [];
 let avisoFixo = false;
+
+// Fila de capas: carrega só as visíveis, com limite de concorrência
+const pendentesCapa = new Map(); // card -> projeto
+const filaCapas = [];
+let capasAtivas = 0;
+const observadorCapas = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entradas => {
+      entradas.forEach(entrada => {
+        if (!entrada.isIntersecting) return;
+        const p = pendentesCapa.get(entrada.target);
+        if (!p) return;
+        observadorCapas.unobserve(entrada.target);
+        pendentesCapa.delete(entrada.target);
+        enfileirarCapa(entrada.target, p);
+      });
+    }, { rootMargin: '200px' })
+  : null;
 
 function iniciarProjetos() {
   iniciarModal();
@@ -142,6 +165,21 @@ function gravarCache(chave, dados) {
   } catch (e) { /* localStorage indisponível */ }
 }
 
+// Mapas de cache (uma chave por item, cada um com a sua data)
+function lerMapa(chave) {
+  try {
+    return geTLocalStorage(chave) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function gravarMapa(chave, mapa) {
+  try {
+    seTLocarStorage(chave, mapa);
+  } catch (e) { /* localStorage indisponível */ }
+}
+
 function mostrarStatus(texto) {
   if (statusEl) {
     statusEl.textContent = texto;
@@ -164,7 +202,7 @@ function link(texto, url, classe = 'projeto-link') {
   return a;
 }
 
-/* ---------- README: primeira imagem e lista de funcionalidades ---------- */
+/* ---------- README: primeira imagem, funcionalidades e parágrafos (sob demanda) ---------- */
 const IMAGEM_IGNORADA = /badge|shields\.io|travis|actions\/workflows|codecov|img\.shields/i;
 
 function decodificarBase64(conteudo) {
@@ -214,13 +252,36 @@ function interpretarReadme(texto, owner, repo) {
   return { imagem, funcionalidades: funcionalidades.slice(0, 6), paragrafos };
 }
 
+// 404 = o repositório não tem README (vale guardar no cache). Outros erros lançam exceção.
 async function buscarReadme(owner, repo) {
+  const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`);
+  if (resp.status === 404) return null;
+  if (!resp.ok) throw new Error(`README: GitHub respondeu ${resp.status}`);
+  const json = await resp.json();
+  return interpretarReadme(decodificarBase64(json.content), owner, repo);
+}
+
+// Busca o README uma vez por projeto, com cache de 7 dias. Erros não são guardados.
+function obterReadme(p) {
+  if (!p._readme) {
+    p._readme = carregarReadme(p);
+  }
+  return p._readme;
+}
+
+async function carregarReadme(p) {
+  const chave = `${p.owner}/${p.nome}`;
+  const mapa = lerMapa(CACHE_README);
+  const entrada = mapa[chave];
+  if (entrada && Date.now() - entrada.quando < TTL_README) return entrada.dados;
+
   try {
-    const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`);
-    if (!resp.ok) return null;
-    const json = await resp.json();
-    return interpretarReadme(decodificarBase64(json.content), owner, repo);
+    const dados = await buscarReadme(p.owner, p.nome);
+    mapa[chave] = { quando: Date.now(), dados };
+    gravarMapa(CACHE_README, mapa);
+    return dados;
   } catch (e) {
+    p._readme = null; // tenta de novo na próxima vez
     return null;
   }
 }
@@ -246,12 +307,16 @@ function repoParaProjeto(repo, cadastrados) {
     destaque: !!(manual && manual.destaque),
     arquivado: repo.archived,
     issues: repo.open_issues_count || 0,
-    readme: null,
   };
 }
 
 async function buscarProjetos() {
-  const resp = await fetch(`https://api.github.com/users/${USUARIO}/repos?per_page=100&type=owner&sort=pushed`);
+  // Repositórios e bd.json em paralelo
+  const [resp, cadastrados] = await Promise.all([
+    fetch(`https://api.github.com/users/${USUARIO}/repos?per_page=100&type=owner&sort=pushed`),
+    carregarBancoDeDados().then(d => d || []),
+  ]);
+
   if (!resp.ok) {
     // 403/429 com limite zerado = cota de requisições esgotada (o radar mostra isso)
     if (resp.status === 403 || resp.status === 429) {
@@ -260,19 +325,9 @@ async function buscarProjetos() {
     }
     throw new Error(`GitHub API respondeu ${resp.status}`);
   }
+
   const repos = (await resp.json()).filter(r => !r.fork);
-  const cadastrados = (await carregarBancoDeDados()) || [];
-
   const dados = repos.map(r => repoParaProjeto(r, cadastrados));
-
-  // README em pequenos lotes, para não estourar o limite de requisições do GitHub
-  const TAMANHO_LOTE = 4;
-  for (let i = 0; i < dados.length; i += TAMANHO_LOTE) {
-    await Promise.all(dados.slice(i, i + TAMANHO_LOTE).map(async p => {
-      p.readme = await buscarReadme(p.owner, p.nome);
-    }));
-  }
-
   gravarCache(CACHE_REPOS, dados);
   return dados;
 }
@@ -292,7 +347,6 @@ async function dadosDeFallback() {
     demo: p.linkProj && !p.linkProj.startsWith('#') ? p.linkProj : '',
     status: p.status,
     destaque: !!p.destaque,
-    readme: null,
   }));
 }
 
@@ -363,7 +417,9 @@ async function capaDoProjeto(p) {
     const imagem = await capaDaDemo(p.demo);
     if (imagem) return imagem;
   }
-  return p.readme?.imagem || '';
+  // Sem demo (ou sem screenshot), usa a primeira imagem do README
+  const readme = await obterReadme(p);
+  return readme?.imagem || '';
 }
 
 function criarCapa(p) {
@@ -379,6 +435,7 @@ function criarCapa(p) {
 }
 
 function aplicarImagem(capa, src) {
+  if (!capa) return;
   const img = new Image();
   img.alt = '';
   img.loading = 'lazy';
@@ -387,6 +444,38 @@ function aplicarImagem(capa, src) {
     capa.classList.remove('sem-imagem');
   };
   img.src = src;
+}
+
+// Enfileira a capa de um card; a fila roda no máximo LIMITE_CAPAS por vez
+function enfileirarCapa(card, p) {
+  filaCapas.push({ card, p });
+  processarFilaCapas();
+}
+
+function processarFilaCapas() {
+  while (capasAtivas < LIMITE_CAPAS && filaCapas.length) {
+    const { card, p } = filaCapas.shift();
+    capasAtivas++;
+    capaDoProjeto(p)
+      .then(src => {
+        if (src && card) aplicarImagem(card.querySelector('.projeto-capa'), src);
+      })
+      .catch(() => { /* sem capa: fica o placeholder */ })
+      .finally(() => {
+        capasAtivas--;
+        processarFilaCapas();
+      });
+  }
+}
+
+// Capa só quando o card aparece na tela (ou já, se o navegador não suportar o observador)
+function agendarCapa(card, p) {
+  if (!observadorCapas) {
+    enfileirarCapa(card, p);
+    return;
+  }
+  pendentesCapa.set(card, p);
+  observadorCapas.observe(card);
 }
 
 /* ---------- cards ---------- */
@@ -460,11 +549,9 @@ function renderizar() {
   secaoDestaque.hidden = !temDestaque;
   divisor.hidden = !temDestaque || recentes.length === 0;
 
-  // Capas carregam uma a uma, para não disparar muitas chamadas de uma vez
-  carregarCapas([
-    ...emDestaque.map((p, i) => [p, cardsDestaque[i]]),
-    ...recentes.map((p, i) => [p, cardsRecentes[i]]),
-  ]);
+  // Capas são agendadas: só carregam quando o card aparece na tela
+  emDestaque.forEach((p, i) => agendarCapa(cardsDestaque[i], p));
+  recentes.forEach((p, i) => agendarCapa(cardsRecentes[i], p));
 
   if (!todos.length) {
     mostrarStatus('Nenhum projeto encontrado.');
@@ -472,14 +559,6 @@ function renderizar() {
     statusEl.hidden = true;
   }
 }
-
-function carregarCapas(pares) {
-  pares.reduce((antes, [p, card]) => antes.then(async () => {
-    const src = await capaDoProjeto(p);
-    if (src && card) aplicarImagem(card.querySelector('.projeto-capa'), src);
-  }), Promise.resolve());
-}
-
 
 /* ---------- modal ---------- */
 function iniciarModal() {
@@ -507,7 +586,7 @@ function abrirModal(p) {
   capa.classList.remove('sem-imagem');
   capa.querySelector('.projeto-capa-terminal')?.classList.add('grande');
   capaDoProjeto(p).then(src => {
-    if (src) aplicarImagem(capa, src);
+    if (src && modal.dataset.projeto === p.nome) aplicarImagem(capa, src);
   });
 
   modal.querySelector('#modal-meta').textContent =
@@ -517,11 +596,26 @@ function abrirModal(p) {
   modal.querySelector('#modal-sobre').textContent = p.sobre || p.descricao;
   modal.dataset.projeto = p.nome;
 
+  // README: mostra "carregando" e preenche quando chegar
   const readmeEl = modal.querySelector('#modal-readme');
-  const paragrafos = p.readme?.paragrafos || [];
-  readmeEl.replaceChildren(...(paragrafos.length
-    ? paragrafos.map(t => el('p', '', t))
-    : [el('p', 'projeto-modal-vazio', 'Este projeto ainda não tem um README com descrição.')]));
+  readmeEl.replaceChildren(el('p', 'projeto-modal-vazio', 'Carregando descrição...'));
+  const funcionalidades = modal.querySelector('#modal-funcionalidades');
+  funcionalidades.replaceChildren();
+  funcionalidades.hidden = true;
+  modal.querySelector('#modal-sub-func').hidden = true;
+
+  obterReadme(p).then(readme => {
+    if (modal.dataset.projeto !== p.nome) return; // o visitante já abriu outro projeto
+    const paragrafos = readme?.paragrafos || [];
+    readmeEl.replaceChildren(...(paragrafos.length
+      ? paragrafos.map(t => el('p', '', t))
+      : [el('p', 'projeto-modal-vazio', 'Este projeto ainda não tem um README com descrição.')]));
+
+    const itens = readme?.funcionalidades || [];
+    funcionalidades.replaceChildren(...itens.map(t => el('li', '', t)));
+    modal.querySelector('#modal-sub-func').hidden = itens.length === 0;
+    funcionalidades.hidden = itens.length === 0;
+  });
 
   const stats = modal.querySelector('#modal-stats');
   const statCommits = el('strong', '', '…');
@@ -542,12 +636,6 @@ function abrirModal(p) {
     el('span', `projeto-status-tom tom-${st.tom}`, st.texto)
   );
 
-  const funcionalidades = modal.querySelector('#modal-funcionalidades');
-  const itens = p.readme?.funcionalidades || [];
-  funcionalidades.replaceChildren(...itens.map(t => el('li', '', t)));
-  modal.querySelector('#modal-sub-func').hidden = itens.length === 0;
-  funcionalidades.hidden = itens.length === 0;
-
   const techs = modal.querySelector('#modal-techs');
   const listaTechs = [p.linguagem, ...p.tecnologias].filter(Boolean);
   techs.replaceChildren(...listaTechs.map(t => el('li', '', t)));
@@ -558,3 +646,6 @@ function abrirModal(p) {
 
   modal.showModal();
 }
+
+// Chamado no fim do arquivo, depois de todas as constantes e do observador estarem definidos
+if (gridDestaque && gridRecentes) iniciarProjetos();
